@@ -1,0 +1,5 @@
+# gebaute App (entsteht mit src/build.sh bzw. in der Pipeline)
+Kulisse.app/
+*.zip
+.DS_Store
+.idea/

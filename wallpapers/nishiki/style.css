@@ -1,0 +1,23 @@
+@font-face { font-family: "Cormorant Garamond"; font-weight: 300; font-style: normal; src: url("fonts/CormorantGaramond-Light.woff2") format("woff2"); font-display: block; }
+@font-face { font-family: "Cormorant Garamond"; font-weight: 500; font-style: normal; src: url("fonts/CormorantGaramond-Medium.woff2") format("woff2"); font-display: block; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #0b2b2e; cursor: default; user-select: none; -webkit-user-select: none; }
+#pond { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* Uhr: schlicht, mit weichem Schatten, damit sie auf hellem und dunklem Wasser lesbar bleibt */
+#clock { position: fixed; color: #fff; font-family: "Cormorant Garamond", "Georgia", serif; text-align: center; pointer-events: none;
+  text-shadow: 0 0.02em 0.25em rgba(0, 20, 25, .55), 0 0 0.8em rgba(0, 20, 25, .35); line-height: 1; }
+#clock[hidden], #clock-date[hidden], #nogl[hidden] { display: none; }
+#clock-time { font-weight: 300; font-size: 15vh; letter-spacing: .04em; font-variant-numeric: lining-nums tabular-nums; }
+#clock-time::after { content: attr(data-suffix); font-size: .28em; font-weight: 500; letter-spacing: .12em; margin-left: .35em; opacity: .85; }
+#clock-date { font-weight: 500; font-size: 2.6vh; letter-spacing: .32em; text-transform: uppercase; margin-top: 1.2vh; opacity: .92; }
+#clock.pos-c { left: 50%; top: 50%; transform: translate(-50%, -50%); }
+#clock.pos-t { left: 50%; top: 9vh; transform: translateX(-50%); }
+#clock.pos-b { left: 50%; bottom: 12vh; transform: translateX(-50%); }
+#clock.pos-tl { left: 5vw; top: 8vh; text-align: left; }
+#clock.pos-tr { right: 5vw; top: 8vh; text-align: right; }
+#clock.pos-bl { left: 5vw; bottom: 12vh; text-align: left; }
+#clock.pos-br { right: 5vw; bottom: 12vh; text-align: right; }
+
+#nogl { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; color: #cfe; font: 18px/1.4 sans-serif; }

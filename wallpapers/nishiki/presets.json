@@ -1,0 +1,9 @@
+[
+  { "name": "Standard", "values": {} },
+  { "name": "Sonniger Tag", "values": { "timemode": "day", "rain": 0, "floating": "sakura", "caustics": 95 } },
+  { "name": "Goldene Stunde", "values": { "timemode": "sunset", "floating": "both", "floatcount": 30, "varieties": "gold" } },
+  { "name": "Mondnacht mit Glühwürmchen", "values": { "timemode": "night", "fireflies": true, "moon": true, "fishcount": 12, "floatcount": 10 } },
+  { "name": "Herbstregen", "values": { "rain": 45, "floating": "maple", "floatcount": 36, "varieties": "dark", "watercolor": "0.42 0.62 0.58" } },
+  { "name": "Uhr auf dem Teich", "values": { "clock": true, "clockpos": "c", "showdate": true } },
+  { "name": "Stromsparend", "values": { "fishcount": 8, "rain": 0, "floatcount": 8, "caustics": 40, "floordetail": 40, "renderscale": "50" } }
+]

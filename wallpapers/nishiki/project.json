@@ -1,0 +1,472 @@
+{
+	"contentrating": "Everyone",
+	"description": "A living koi pond seen from above. Sunlight dances across the pebbles, lily pads drift, cherry blossoms float by. Click to scatter food and watch the koi race to it; move the mouse to draw ripples, rest it and the curious ones come over. The pond follows your clock from dawn through golden hour to a moonlit night with fireflies, and ripples to the beat of your music. Rain, clock, koi varieties, petals or maple leaves and more in the settings.",
+	"file": "index.html",
+	"general": {
+		"localization": {
+			"en-us": {
+				"ui_nk_timemode": "Time of day",
+				"ui_nk_time_auto": "Follow my clock",
+				"ui_nk_time_day": "Always day",
+				"ui_nk_time_sunset": "Always golden hour",
+				"ui_nk_time_night": "Always night",
+				"ui_nk_watercolor": "Water tint",
+				"ui_nk_caustics": "Sunlight on the pond floor",
+				"ui_nk_rain": "Rain",
+				"ui_nk_fireflies": "Fireflies at night",
+				"ui_nk_moon": "Moon reflection at night",
+				"ui_nk_fishcount": "Number of koi",
+				"ui_nk_varieties": "Koi varieties",
+				"ui_nk_var_mixed": "Mixed pond",
+				"ui_nk_var_classic": "Classic (Kohaku, Sanke, Tancho)",
+				"ui_nk_var_gold": "Gold and platinum",
+				"ui_nk_var_dark": "Dark (Showa, Utsuri, Asagi)",
+				"ui_nk_fishsize": "Koi size (%)",
+				"ui_nk_fishspeed": "Swimming speed (%)",
+				"ui_nk_feed": "Click to feed the koi",
+				"ui_nk_cursorripple": "Mouse leaves ripples",
+				"ui_nk_curious": "Koi gather under a resting cursor",
+				"ui_nk_react": "Reaction to music",
+				"ui_nk_pads": "Lily pads",
+				"ui_nk_flowers": "Water lily flowers",
+				"ui_nk_floating": "Floating on the water",
+				"ui_nk_float_sakura": "Cherry blossom petals",
+				"ui_nk_float_maple": "Autumn maple leaves",
+				"ui_nk_float_both": "Petals and leaves",
+				"ui_nk_float_none": "Nothing",
+				"ui_nk_floatcount": "Amount floating",
+				"ui_nk_layout": "Pond layout (try other numbers)",
+				"ui_nk_floordetail": "Pebble detail",
+				"ui_nk_clock": "Show clock",
+				"ui_nk_clockpos": "Clock position",
+				"ui_nk_pos_c": "Center",
+				"ui_nk_pos_t": "Top",
+				"ui_nk_pos_b": "Bottom",
+				"ui_nk_pos_tl": "Top left",
+				"ui_nk_pos_tr": "Top right",
+				"ui_nk_pos_bl": "Bottom left",
+				"ui_nk_pos_br": "Bottom right",
+				"ui_nk_timeformat": "Time format",
+				"ui_nk_fmt24": "24 hours",
+				"ui_nk_fmt12": "12 hours",
+				"ui_nk_showdate": "Show date",
+				"ui_nk_renderscale": "Render resolution (lower = faster)",
+				"ui_nk_rs100": "100 % (best quality)",
+				"ui_nk_rs75": "75 %",
+				"ui_nk_rs50": "50 % (laptops)"
+			},
+			"de-de": {
+				"ui_nk_timemode": "Tageszeit",
+				"ui_nk_time_auto": "Wie meine Uhr",
+				"ui_nk_time_day": "Immer Tag",
+				"ui_nk_time_sunset": "Immer Abendsonne",
+				"ui_nk_time_night": "Immer Nacht",
+				"ui_nk_watercolor": "Wasserfarbe",
+				"ui_nk_caustics": "Lichtspiel am Grund",
+				"ui_nk_rain": "Regen",
+				"ui_nk_fireflies": "Glühwürmchen nachts",
+				"ui_nk_moon": "Mondspiegelung nachts",
+				"ui_nk_fishcount": "Anzahl Koi",
+				"ui_nk_varieties": "Koi-Sorten",
+				"ui_nk_var_mixed": "Gemischter Teich",
+				"ui_nk_var_classic": "Klassisch (Kohaku, Sanke, Tancho)",
+				"ui_nk_var_gold": "Gold und Platin",
+				"ui_nk_var_dark": "Dunkel (Showa, Utsuri, Asagi)",
+				"ui_nk_fishsize": "Koi-Größe (%)",
+				"ui_nk_fishspeed": "Schwimmtempo (%)",
+				"ui_nk_feed": "Klick füttert die Koi",
+				"ui_nk_cursorripple": "Maus zieht Wellen",
+				"ui_nk_curious": "Koi kommen zum ruhenden Mauszeiger",
+				"ui_nk_react": "Reaktion auf Musik",
+				"ui_nk_pads": "Seerosenblätter",
+				"ui_nk_flowers": "Seerosenblüten",
+				"ui_nk_floating": "Auf dem Wasser treibt",
+				"ui_nk_float_sakura": "Kirschblüten",
+				"ui_nk_float_maple": "Ahornblätter im Herbst",
+				"ui_nk_float_both": "Blüten und Blätter",
+				"ui_nk_float_none": "Nichts",
+				"ui_nk_floatcount": "Menge auf dem Wasser",
+				"ui_nk_layout": "Teich-Anordnung (andere Zahl probieren)",
+				"ui_nk_floordetail": "Kiesel-Details",
+				"ui_nk_clock": "Uhr anzeigen",
+				"ui_nk_clockpos": "Position der Uhr",
+				"ui_nk_pos_c": "Mitte",
+				"ui_nk_pos_t": "Oben",
+				"ui_nk_pos_b": "Unten",
+				"ui_nk_pos_tl": "Oben links",
+				"ui_nk_pos_tr": "Oben rechts",
+				"ui_nk_pos_bl": "Unten links",
+				"ui_nk_pos_br": "Unten rechts",
+				"ui_nk_timeformat": "Zeitformat",
+				"ui_nk_fmt24": "24 Stunden",
+				"ui_nk_fmt12": "12 Stunden",
+				"ui_nk_showdate": "Datum anzeigen",
+				"ui_nk_renderscale": "Renderauflösung (weniger = schneller)",
+				"ui_nk_rs100": "100 % (beste Qualität)",
+				"ui_nk_rs75": "75 %",
+				"ui_nk_rs50": "50 % (Laptops)"
+			},
+			"zh-chs": {
+				"ui_nk_timemode": "时间",
+				"ui_nk_time_auto": "跟随本地时间",
+				"ui_nk_time_day": "始终白天",
+				"ui_nk_time_sunset": "始终黄昏",
+				"ui_nk_time_night": "始终夜晚",
+				"ui_nk_watercolor": "水色",
+				"ui_nk_caustics": "水底光纹",
+				"ui_nk_rain": "雨",
+				"ui_nk_fireflies": "夜晚萤火虫",
+				"ui_nk_moon": "夜晚月影",
+				"ui_nk_fishcount": "锦鲤数量",
+				"ui_nk_varieties": "锦鲤品种",
+				"ui_nk_var_mixed": "混合",
+				"ui_nk_var_classic": "经典（红白、大正三色、丹顶）",
+				"ui_nk_var_gold": "金银",
+				"ui_nk_var_dark": "暗色（昭和三色、写鲤、浅黄）",
+				"ui_nk_fishsize": "锦鲤大小 (%)",
+				"ui_nk_fishspeed": "游动速度 (%)",
+				"ui_nk_feed": "点击喂食",
+				"ui_nk_cursorripple": "鼠标划出涟漪",
+				"ui_nk_curious": "锦鲤聚到静止的鼠标下",
+				"ui_nk_react": "随音乐律动",
+				"ui_nk_pads": "睡莲叶",
+				"ui_nk_flowers": "睡莲花",
+				"ui_nk_floating": "水面漂浮",
+				"ui_nk_float_sakura": "樱花花瓣",
+				"ui_nk_float_maple": "秋日枫叶",
+				"ui_nk_float_both": "花瓣与枫叶",
+				"ui_nk_float_none": "无",
+				"ui_nk_floatcount": "漂浮数量",
+				"ui_nk_layout": "池塘布局（换个数字试试）",
+				"ui_nk_floordetail": "鹅卵石细节",
+				"ui_nk_clock": "显示时钟",
+				"ui_nk_clockpos": "时钟位置",
+				"ui_nk_pos_c": "居中",
+				"ui_nk_pos_t": "顶部",
+				"ui_nk_pos_b": "底部",
+				"ui_nk_pos_tl": "左上",
+				"ui_nk_pos_tr": "右上",
+				"ui_nk_pos_bl": "左下",
+				"ui_nk_pos_br": "右下",
+				"ui_nk_timeformat": "时间格式",
+				"ui_nk_fmt24": "24 小时制",
+				"ui_nk_fmt12": "12 小时制",
+				"ui_nk_showdate": "显示日期",
+				"ui_nk_renderscale": "渲染分辨率（越低越流畅）",
+				"ui_nk_rs100": "100%（最佳画质）",
+				"ui_nk_rs75": "75%",
+				"ui_nk_rs50": "50%（笔记本）"
+			}
+		},
+		"properties": {
+			"schemecolor": {
+				"order": 0,
+				"text": "ui_browse_properties_scheme_color",
+				"type": "color",
+				"value": "0.34 0.76 0.8"
+			},
+			"timemode": {
+				"order": 1,
+				"text": "ui_nk_timemode",
+				"type": "combo",
+				"value": "auto",
+				"options": [
+					{
+						"label": "ui_nk_time_auto",
+						"value": "auto"
+					},
+					{
+						"label": "ui_nk_time_day",
+						"value": "day"
+					},
+					{
+						"label": "ui_nk_time_sunset",
+						"value": "sunset"
+					},
+					{
+						"label": "ui_nk_time_night",
+						"value": "night"
+					}
+				]
+			},
+			"watercolor": {
+				"order": 2,
+				"text": "ui_nk_watercolor",
+				"type": "color",
+				"value": "0.34 0.76 0.8"
+			},
+			"caustics": {
+				"order": 3,
+				"text": "ui_nk_caustics",
+				"type": "slider",
+				"value": 80,
+				"min": 0,
+				"max": 100,
+				"fraction": false
+			},
+			"rain": {
+				"order": 4,
+				"text": "ui_nk_rain",
+				"type": "slider",
+				"value": 0,
+				"min": 0,
+				"max": 100,
+				"fraction": false
+			},
+			"fireflies": {
+				"order": 5,
+				"text": "ui_nk_fireflies",
+				"type": "bool",
+				"value": true
+			},
+			"moon": {
+				"order": 6,
+				"text": "ui_nk_moon",
+				"type": "bool",
+				"value": true
+			},
+			"fishcount": {
+				"order": 7,
+				"text": "ui_nk_fishcount",
+				"type": "slider",
+				"value": 16,
+				"min": 0,
+				"max": 40,
+				"fraction": false
+			},
+			"varieties": {
+				"order": 8,
+				"text": "ui_nk_varieties",
+				"type": "combo",
+				"value": "mixed",
+				"options": [
+					{
+						"label": "ui_nk_var_mixed",
+						"value": "mixed"
+					},
+					{
+						"label": "ui_nk_var_classic",
+						"value": "classic"
+					},
+					{
+						"label": "ui_nk_var_gold",
+						"value": "gold"
+					},
+					{
+						"label": "ui_nk_var_dark",
+						"value": "dark"
+					}
+				]
+			},
+			"fishsize": {
+				"order": 9,
+				"text": "ui_nk_fishsize",
+				"type": "slider",
+				"value": 100,
+				"min": 60,
+				"max": 150,
+				"fraction": false
+			},
+			"fishspeed": {
+				"order": 10,
+				"text": "ui_nk_fishspeed",
+				"type": "slider",
+				"value": 100,
+				"min": 40,
+				"max": 200,
+				"fraction": false
+			},
+			"feed": {
+				"order": 11,
+				"text": "ui_nk_feed",
+				"type": "bool",
+				"value": true
+			},
+			"cursorripple": {
+				"order": 12,
+				"text": "ui_nk_cursorripple",
+				"type": "bool",
+				"value": true
+			},
+			"curious": {
+				"order": 13,
+				"text": "ui_nk_curious",
+				"type": "bool",
+				"value": true
+			},
+			"react": {
+				"order": 14,
+				"text": "ui_nk_react",
+				"type": "slider",
+				"value": 60,
+				"min": 0,
+				"max": 100,
+				"fraction": false
+			},
+			"pads": {
+				"order": 15,
+				"text": "ui_nk_pads",
+				"type": "slider",
+				"value": 16,
+				"min": 0,
+				"max": 24,
+				"fraction": false
+			},
+			"flowers": {
+				"order": 16,
+				"text": "ui_nk_flowers",
+				"type": "bool",
+				"value": true
+			},
+			"floating": {
+				"order": 17,
+				"text": "ui_nk_floating",
+				"type": "combo",
+				"value": "sakura",
+				"options": [
+					{
+						"label": "ui_nk_float_sakura",
+						"value": "sakura"
+					},
+					{
+						"label": "ui_nk_float_maple",
+						"value": "maple"
+					},
+					{
+						"label": "ui_nk_float_both",
+						"value": "both"
+					},
+					{
+						"label": "ui_nk_float_none",
+						"value": "none"
+					}
+				]
+			},
+			"floatcount": {
+				"order": 18,
+				"text": "ui_nk_floatcount",
+				"type": "slider",
+				"value": 22,
+				"min": 0,
+				"max": 60,
+				"fraction": false,
+				"condition": "floating.value != 'none'"
+			},
+			"layout": {
+				"order": 19,
+				"text": "ui_nk_layout",
+				"type": "slider",
+				"value": 5,
+				"min": 1,
+				"max": 20,
+				"fraction": false
+			},
+			"floordetail": {
+				"order": 20,
+				"text": "ui_nk_floordetail",
+				"type": "slider",
+				"value": 75,
+				"min": 0,
+				"max": 100,
+				"fraction": false
+			},
+			"clock": {
+				"order": 21,
+				"text": "ui_nk_clock",
+				"type": "bool",
+				"value": false
+			},
+			"clockpos": {
+				"order": 22,
+				"text": "ui_nk_clockpos",
+				"type": "combo",
+				"value": "c",
+				"options": [
+					{
+						"label": "ui_nk_pos_c",
+						"value": "c"
+					},
+					{
+						"label": "ui_nk_pos_t",
+						"value": "t"
+					},
+					{
+						"label": "ui_nk_pos_b",
+						"value": "b"
+					},
+					{
+						"label": "ui_nk_pos_tl",
+						"value": "tl"
+					},
+					{
+						"label": "ui_nk_pos_tr",
+						"value": "tr"
+					},
+					{
+						"label": "ui_nk_pos_bl",
+						"value": "bl"
+					},
+					{
+						"label": "ui_nk_pos_br",
+						"value": "br"
+					}
+				],
+				"condition": "clock.value == true"
+			},
+			"timeformat": {
+				"order": 23,
+				"text": "ui_nk_timeformat",
+				"type": "combo",
+				"value": "24",
+				"options": [
+					{
+						"label": "ui_nk_fmt24",
+						"value": "24"
+					},
+					{
+						"label": "ui_nk_fmt12",
+						"value": "12"
+					}
+				],
+				"condition": "clock.value == true"
+			},
+			"showdate": {
+				"order": 24,
+				"text": "ui_nk_showdate",
+				"type": "bool",
+				"value": true,
+				"condition": "clock.value == true"
+			},
+			"renderscale": {
+				"order": 25,
+				"text": "ui_nk_renderscale",
+				"type": "combo",
+				"value": "100",
+				"options": [
+					{
+						"label": "ui_nk_rs100",
+						"value": "100"
+					},
+					{
+						"label": "ui_nk_rs75",
+						"value": "75"
+					},
+					{
+						"label": "ui_nk_rs50",
+						"value": "50"
+					}
+				]
+			}
+		},
+		"supportsaudioprocessing": true
+	},
+	"preview": "preview.jpg",
+	"tags": [
+		"Nature",
+		"Relaxing",
+		"Animal"
+	],
+	"title": "Nishiki: Interactive Koi Pond",
+	"type": "web",
+	"visibility": "private"
+}

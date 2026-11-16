@@ -1,0 +1,151 @@
+KULISSE (macOS)  –  früher „Waschbär Pointer“
+  Zeiger-Designs für Präsentationen und Live-Hintergründe für den Schreibtisch.
+========================
+
+Starten
+  Doppelklick auf "Kulisse.app". Oben in der Menüleiste erscheint 🦝.
+  (Auf einem anderen Mac beim ersten Mal: Rechtsklick auf die App -> Öffnen.)
+
+Designs (im 🦝-Menü umschaltbar)
+  Zeigestock  - weiße Hand auf Teleskopstab (Standard), Bild: zeigestock-hand.png
+  Waschbär    - fellige Waschbärhand,                  Bild: waschbaer-hand.png
+  Waschbär hält Stab - Zeigestock, unten hält eine Waschbärpfote den Griff, Bild: waschbaer-halter.png
+                (aus einem Bild mit schwarzem Hintergrund erzeugt:
+                 swift src/make_halter.swift <bild.png> waschbaer-halter.png)
+  Halloween   - Taschenlampe: Bildschirm wird dunkel, um die Maus flackert ein Lichtkegel,
+                die Maus ist ein 🎃, ein 👻 schwebt hinterher, bei jedem Klick fliegen 🦇 los.
+                Ist immer an (auch im Modus "Nur über Links"), nur "Aus" (Ctrl+Option+P) schaltet es ab.
+                Größe/Dunkelheit: LIGHT_RADIUS, LIGHT_FEATHER, NIGHT_COLOR in src/halloween.swift.
+  Halloween 🕷️ - Spinne am Faden ist der Zeiger und schwingt beim Bewegen nach. Jeder Klick spinnt
+                ein kleines Netz an der Klickstelle (verblasst nach 2,5 s) - macht Klicks sichtbar.
+                Ebenfalls immer an, außer im Modus "Aus". WEB_RADIUS / WEB_STAY in src/halloween.swift.
+  addmore     - Laserpointer: leuchtender oranger Punkt mit "+", kurzer Leuchtschweif hinter der Maus,
+                jeder Klick schickt orange Ringe nach außen. Ebenfalls immer an, außer im Modus "Aus".
+  Zug         - Zeiger ist eine kleine Dampflok (dampft beim Bewegen). Im Zeichenmodus werden aus dem Strich
+                Schienen; 1 Sekunde später fährt ein Zug die Strecke im gleichen Tempo nach, wie gemalt wurde.
+                Einstellungen: TRAIN_DELAY, TRAIN_WAGONS in src/zug.swift.
+  Grüne Füße  - Zeiger ist ein grüner Fußabdruck (Spitze des großen Zehs = Klickpunkt). Beim Bewegen läuft
+                eine Spur kleiner grüner Fußabdrücke mit, die verblasst. Klick: Fuß stampft, grüner Ring spritzt.
+                Im Zeichenmodus entsteht eine Fußspur. Farben: FOOT_GREEN / FOOT_DARK in src/fuesse.swift.
+  Ente mit Küken - Zeiger ist eine watschelnde Ente, 3 Küken laufen im Gänsemarsch auf dem Mausweg hinterher.
+                Stillstand: nach 3 s schlafen die Küken ein (💤). Klick: "Quak!" + Küken hüpfen hoch.
+                Alle 8-20 s taucht irgendwo ein 🥚 auf: mit der Ente drüberfahren -> es schlüpft ein Küken und
+                reiht sich hinten ein (max. 40). Eier verschwinden nach 25 s. Neustart der App = wieder 3 Küken.
+                Einstellungen: DUCKLINGS, DUCKLING_GAP, DUCK_SLEEP_AFTER, EGG_EVERY, EGG_STAY in src/ente.swift.
+  Skelett 💀  - aus dem Windows-Lava-Pointer übernommen: Kopf mit Nadel (Spitze = Klickpunkt), darunter hängt
+                ein schwarzes, leuchtendes Skelett mit Physik - rennt beim seitlichen Bewegen, reißt beim Hochfahren
+                die Arme hoch, zappelt beim Fallen, pendelt aus. Sichtbar wie die Stab-Designs (Modus beachten).
+                Eingebaut mit 💀-Kopf; "Skelett Totenkopf" liegt als .pointertheme in themes/ (gezeichneter Schädel
+                mit glühenden Augen; neue Farbe: swift src/make_skull.swift "#6EBEFF" kopf.png).
+                Physik-Werte oben in src/skelett.swift.
+  Lava Hand / Schnee Hand - die Original-Hände aus dem Windows-Lava-Pointer auf dem Teleskopstab
+                (importierte Designs, Dateien in themes/).
+  UFO-Kuh-Entführung 🛸 - Zeiger ist ein wackelndes UFO mit Traktorstrahl. Unten laufen Kühe und muhen.
+                UFO tief über eine Kuh -> sie wird hochgebeamt und eingesaugt (Zähler am UFO); UFO weg -> sie
+                fällt runter ("Aua!"). Klick: Strahl blitzt, Kühe springen. Bei 5 Kühen wirft das UFO alle an
+                Fallschirmen wieder ab. Einstellungen: UFO_BEAM_REACH, UFO_CAPACITY, UFO_MAX_COWS in src/ufo.swift.
+  Wüstenplanet ✦ - dezent & futuristisch: HUD-Visier (Raute = Klickpunkt, Ring, kreisende Bogensegmente),
+                feiner Sand rieselt beim Bewegen und weht davon, im Stillstand glimmt die Raute gewürz-blau,
+                Klick = "Thumper"-Ringe. Farben/Zeiten oben in src/wueste.swift.
+  Peitsche 🤠 - Lederpeitsche: Messingring vorne am Griff = Klickpunkt, die geflochtene Schnur hängt dran
+                und schwingt mit jeder Bewegung (Seil-Physik). Normal: Klicks gehen ganz normal durch, kein Knall.
+                Zeichenmodus (Ctrl+Option+V) einschalten = Knall-Modus: jeder Klick ODER eine Peitschen-
+                Bewegung (Maus schnell schwingen und abrupt stoppen/zurückreißen) -> Zischen, die Schnur
+                schnalzt nach vorne, an der Spitze blitzt es und es KNALLT (Ton über Mac-Lautsprecher / Beamer).
+                Dabei wird kein Strich gezeichnet. Geräusch: peitsche-knall.mp3 in diesem Ordner (austauschbar;
+                bei anderer Datei WHIP_SOUND_BANG = Sekunde des Knalls anpassen). Lautstärke: WHIP_VOLUME, Bewegung:
+                WHIP_FLICK_SPEED (kleiner = knallt leichter) oben in src/peitsche.swift.
+
+  Strich im Zeichenmodus (Ctrl+Option+V) je nach Design:
+    Zeigestock + Waschbär hält Stab: Neon-Orange      Waschbär: Pfotenspur 🐾      Taschenlampe: grüner Leucht-Schleim
+    Spinne: weißer Spinnenfaden     addmore: halbdurchsichtiger oranger Textmarker     Zug: Schienen + Zug
+    Grüne Füße: grüne Fußspur      Ente: Teich-blaue Linie      Skelett: schwarzer Strich mit Leuchtrand
+    UFO: Kuhflecken-Strich      Wüstenplanet: feine goldene Linie      Peitsche: kein Strich, nur Knall
+    (Einstellungen: strokeStyle in src/addmore.swift)
+  Ein Bild austauschen: neue Datei mit demselben Namen in diesen Ordner legen (neben die App),
+  dann das Design im 🦝-Menü einmal neu anklicken (lädt das Bild neu). Finger zeigt senkrecht nach oben, transparenter Hintergrund.
+  Größe der Hand pro Design: "handHeight" in src/main.swift. Den Stab zeichnet die App selbst.
+
+Designs exportieren / importieren (🦝-Menü)
+  "Design exportieren …"  speichert das aktuelle Design als .pointertheme-Datei (Zip mit theme.json + Bildern)
+                          - zum Weitergeben per Slack/Mail oder als Vorlage für ein eigenes Design.
+  "Design importieren …"  oder Doppelklick auf eine .pointertheme-Datei im Finder: das Design erscheint im Menü
+                          mit ⭐ unter den eingebauten. Gespeichert in
+                          ~/Library/Application Support/Kulisse/Themes/
+  Eigenes Design bauen: exportieren, die .pointertheme in .zip umbenennen und entpacken, theme.json ändern
+  bzw. hand.png austauschen, Ordner wieder importieren (Ordner geht direkt, Zip auch).
+  theme.json:
+    "name"   Name im Menü                          "base"  eingebautes Design als Grundlage
+    "hand"   {"image": "hand.png", "height": 80}   eigenes Handbild + Größe (nur Stab-Designs)
+    "holder" {"image", "gripX", "gripWidth", "anchorY"}  Hand am Griff (Werte von src/make_halter.swift)
+    "stick"  {"length": 500, "tilt": 45}           Stablänge, Neigung
+    "stroke" {"color": "#F36D03", "width": 6, "glow": 4, "opacity": 1}   oder {"stamp": "⭐"} = Emoji-Stempel
+  Animationen/Effekte (Ente, Zug, ...) kommen immer vom Basis-Design.
+  Ohne Dialog: "Kulisse.app/Contents/MacOS/Kulisse" --export-theme <datei> / --import-theme <datei>
+
+Live-Hintergrund 🌊 (im 🦝-Menü ganz oben)
+  Animierter Hintergrund hinter den Desktop-Symbolen, auf allen Bildschirmen. Eingebaut: Nishiki-Koi-Teich
+  (Ordner wallpapers/nishiki). Maus zieht Wellen, Klick auf den freien Schreibtisch füttert die Koi
+  (liegt ein Fenster darüber, geht der Klick nicht an den Teich).
+  Menü:  an/aus, Pausieren, Hintergrund wählen, Vorlagen, Einstellungen …, Als Vorlage speichern …,
+         Exportieren …, Importieren …
+  Einstellungsfenster: alle Regler des Hintergrunds (kommen aus seiner project.json), Bildrate (Standard 30 fps),
+         alle Bildschirme oder nur Hauptbildschirm, bei Akkubetrieb pausieren.
+  Strom: Bildschirme, auf denen der Schreibtisch komplett zugedeckt ist (maximierte Fenster, Vollbild),
+         pausieren automatisch, ebenso bei Bildschirmschoner/Sperre und (abschaltbar) im Akkubetrieb.
+         "Qualität: Automatisch" rendert große Bildschirme (ab 2000 pt Breite, z. B. 5K) mit einfacher statt doppelter
+         Pixeldichte = ein Viertel der Pixel; das Laptop-Display bleibt scharf. "Normal" spart überall, "Retina" nie.
+         Zusätzlich helfen "Renderauflösung 75 %" oder die Vorlage "Stromsparend".
+  Vorlagen: mitgelieferte in wallpapers/<name>/presets.json, eigene (⭐) in
+         ~/Library/Application Support/Kulisse/Wallpaper-Presets/
+  Exportieren: speichert Hintergrund + aktuelle Einstellungen als .wallpapertheme (Zip mit wallpaper.json,
+         auf Wunsch mit dem kompletten Hintergrund-Ordner unter files/). Doppelklick auf so eine Datei importiert sie.
+  Importieren: .wallpapertheme, oder Web-Hintergründe aus Wallpaper Engine (Ordner oder Zip mit project.json,
+         Typ "web"; Szenen- und Video-Hintergründe gehen nicht). Importierte Hintergründe liegen in
+         ~/Library/Application Support/Kulisse/Wallpapers/
+  Sicherheit: Hintergründe laufen ohne Internet (http/https/ws gesperrt), lesen nur ihren eigenen Ordner und haben
+         keinen Zugriff auf die App.
+  Musik: "Auf Musik reagieren" (Menü oder Einstellungen) hört den Systemton mit (macOS-Audio-Tap, ab macOS 14.2)
+         und gibt das Spektrum wie Wallpaper Engine an den Hintergrund. Beim ersten Mal fragt macOS nach der Freigabe
+         "Audioaufnahme" (Datenschutz & Sicherheit). Nichts wird gespeichert. Läuft nur, solange ein Hintergrund
+         sichtbar ist. Nach jedem Neubauen (build.sh) kann macOS erneut fragen (neue Signatur).
+  Mitgeliefert: "Nishiki" (Koi-Teich, WebGL) und "Neon Nook" (gemütlicher Fensterplatz über einer verregneten
+         Cyberpunk-Stadt, Canvas 2D: Maus wischt die beschlagene Scheibe frei, Klick aufs Glas = Tropfen, Klick auf die
+         Katze weckt sie, Werbetafel/Radio/Lichterkette tanzen zur Musik). Beide im Wallpaper-Engine-Format.
+  Sperrbildschirm: "Auch auf dem Sperrbildschirm (Standbild)". macOS lässt keine App auf den Sperrbildschirm
+         zeichnen, zeigt dort aber das Schreibtischbild. Darum setzt die App alle 15 Minuten, nach jeder Änderung und
+         beim Sperren ein Standbild vom Hintergrund als Schreibtischbild (je Bildschirm, Dateien in
+         ~/Library/Application Support/Kulisse/Sperrbildschirm). Haken aus oder Live-Hintergrund aus =
+         das vorherige Schreibtischbild kommt zurück.
+         macOS merkt sich das Schreibtischbild je Space; beim Space-Wechsel wird das Standbild nachgetragen.
+  Bewegt beim Sperren: Menü → "Bildschirmschoner einrichten …" kopiert den Bildschirmschoner "Kulisse"
+         nach ~/Library/Screen Savers. Selbst einstellen (die App ändert keine Systemeinstellungen):
+         Bildschirmschoner = "Kulisse", Sperrbildschirm → Passwort nach Beginn des Bildschirmschoners
+         = "Sofort". Danach sperrt "Sperren – Hintergrund läuft weiter" (⌃⌥⌘L) den Mac und der Teich läuft weiter,
+         bis man Maus/Tastatur anfasst; dann kommt die normale Passwortabfrage von macOS. ⌃⌘Q und Touch ID zeigen
+         weiter den normalen Sperrbildschirm. Der Bildschirmschoner liest saver.json und eine Kopie des Hintergrunds
+         unter ~/Library/Application Support/Kulisse/ (Quelle: src/saver.swift, eigenes Bündel aus build.sh).
+  Eigener Hintergrund: Ordner mit project.json + index.html wie bei Wallpaper Engine; Einstellungen kommen über
+         window.wallpaperPropertyListener.applyUserProperties / applyGeneralProperties({fps}) / setPaused(bool).
+  Ohne Dialog: ... --import-wallpaper <datei>  /  --export-wallpaper <datei> [--embed]
+  Fehlersuche: defaults write local.kulisse.app wallpaperDebug -bool true, App neu starten
+         -> alle 3 s Bildrate, Pausenstatus und Audio je Bildschirm in ~/Library/Logs/Kulisse-Hintergrund.log
+
+Bedienen
+  Ctrl+Option+P   Modus: nur über Links -> immer -> aus
+  Ctrl+Option+V   Zeichenmodus an/aus (zum Präsentieren):
+                  - linke Maustaste gedrückt halten und malen (addmore-Orange)
+                  - der Strich verschwindet 2,5 Sekunden nach dem Loslassen
+                  - Klicks gehen nicht an die Präsentation, die Pfeiltasten aber schon
+                  - Rechtsklick löscht alle Striche sofort
+  Ctrl+Option+Q   beenden (der normale Zeiger kommt sofort zurück)
+  🦝-Menü         Design, Modus, Zeichenmodus, Export/Import, "Bei Anmeldung starten", Beenden
+
+Neu bauen (z. B. nach Änderungen in src/main.swift)
+  src/build.sh   - legt dabei auch waschbaer-hand.png fest in die App, falls vorhanden.
+
+UMBENENNUNG (Waschbär Pointer -> Kulisse)
+  Beim ersten Start übernimmt Kulisse alle Einstellungen (local.waschbaer.pointer -> local.kulisse.app) und zieht
+  ~/Library/Application Support/WaschbaerPointer nach .../Kulisse um (der alte Name bleibt als Verweis).
+  Ein eingerichteter Bildschirmschoner wird durch "Kulisse" ersetzt: in den Systemeinstellungen neu auswählen.
+  macOS fragt die Freigabe "Audioaufnahme" für Kulisse neu ab. Das Zeiger-Design "Waschbär" heißt weiter so.

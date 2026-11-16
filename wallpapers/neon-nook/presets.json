@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Standard",
+    "values": {}
+  },
+  {
+    "name": "Gewitternacht",
+    "values": {
+      "rain": 95,
+      "thunder": true,
+      "fog": 55,
+      "traffic": 8,
+      "lamp": 45
+    }
+  },
+  {
+    "name": "Synthwave-Abend",
+    "values": {
+      "palette": "sunset",
+      "rain": 20,
+      "fog": 15,
+      "traffic": 22,
+      "clock": "neon"
+    }
+  },
+  {
+    "name": "Giftgrüne Unterstadt",
+    "values": {
+      "palette": "toxic",
+      "rain": 70,
+      "catcolor": "grey",
+      "searchlights": false
+    }
+  },
+  {
+    "name": "Eisblaue Ruhe",
+    "values": {
+      "palette": "ice",
+      "rain": 40,
+      "fog": 60,
+      "traffic": 6,
+      "catcolor": "white",
+      "lights": true
+    }
+  },
+  {
+    "name": "Nur Regen und Katze",
+    "values": {
+      "traffic": 0,
+      "searchlights": false,
+      "rain": 80,
+      "lights": false,
+      "clock": "off"
+    }
+  },
+  {
+    "name": "Stromsparend",
+    "values": {
+      "traffic": 6,
+      "rain": 30,
+      "glassdrops": false,
+      "fog": 0,
+      "renderscale": "50"
+    }
+  }
+]
