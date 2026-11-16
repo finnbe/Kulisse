@@ -346,9 +346,13 @@ final class SkeletonFX {
                 let bx = nk.x + (md.x - nk.x) * t, by = nk.y + (md.y - nk.y) * t
                 let hw = u * (0.30 - 0.035 * CGFloat(i))
                 for s in [CGFloat(-1), 1] {
-                    line(ribs, [0, 0.35, 0.7, 0.9, 1.0].map { (f: CGFloat) in
-                        CGPoint(x: bx + nx * hw * f * s + ax * u * 0.12 * f * f, y: by + ny * hw * f * s + ay * u * 0.12 * f * f)
-                    })
+                    let fs: [CGFloat] = [0, 0.35, 0.7, 0.9, 1.0]
+                    let pts: [CGPoint] = fs.map { (f: CGFloat) -> CGPoint in
+                        let side: CGFloat = hw * f * s            // Ausdruck aufgeteilt: ältere Swift-Versionen
+                        let bend: CGFloat = u * 0.12 * f * f      // brauchen sonst zu lange zum Typprüfen
+                        return CGPoint(x: bx + nx * side + ax * bend, y: by + ny * side + ay * bend)
+                    }
+                    line(ribs, pts)
                 }
             }
             let groups: [(CGMutablePath, CGFloat)] = [(spine, w), (collar, w * 0.8), (arms, w * 0.75), (legs, w * 0.85), (ribs, w * 0.5)]
