@@ -18,7 +18,7 @@ compile() {
   done
   lipo -create "${parts[@]}" -output "$out"
 }
-compile "$APP/Contents/MacOS/Kulisse" main.swift halloween.swift addmore.swift zug.swift fuesse.swift ente.swift themes.swift skelett.swift ufo.swift wueste.swift peitsche.swift wallpaper.swift wallpaper_ui.swift wallpaper_audio.swift -framework Cocoa -framework Carbon -framework AVFoundation -framework WebKit -framework IOKit -framework CoreAudio -framework AudioToolbox -framework Accelerate
+compile "$APP/Contents/MacOS/Kulisse" main.swift halloween.swift addmore.swift zug.swift fuesse.swift ente.swift themes.swift skelett.swift ufo.swift wueste.swift peitsche.swift yuzu.swift wallpaper.swift wallpaper_ui.swift wallpaper_audio.swift -framework Cocoa -framework Carbon -framework AVFoundation -framework WebKit -framework IOKit -framework CoreAudio -framework AudioToolbox -framework Accelerate
 cp platzhalter-hand.png "$APP/Contents/Resources/"
 cp AppIcon.icns "$APP/Contents/Resources/"          # App-Symbol (Vorhang mit Mondnacht, lokal mit Z-Image-Turbo erzeugt)
 # Live-Hintergründe (Ordner wallpapers/ neben src/)

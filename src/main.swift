@@ -36,7 +36,7 @@ func CGSSetConnectionProperty(_ cid: Int32, _ target: Int32, _ key: CFString, _ 
 
 /// Hand-Design: Bilddatei und Größe (Fingerspitze bis unterer Rand des Bildes, in Punkten)
 enum Theme: String, CaseIterable {
-    case zeigestock, halter, waschbaer, halloween, spinne, addmore, zug, fuesse, ente, skelett, ufo, wueste, peitsche
+    case zeigestock, halter, waschbaer, halloween, spinne, addmore, zug, fuesse, ente, skelett, ufo, wueste, peitsche, yuzu
     var title: String {
         switch self {
         case .zeigestock: return "Zeigestock"
@@ -52,6 +52,7 @@ enum Theme: String, CaseIterable {
         case .ufo: return "UFO-Kuh-Entführung 🛸"
         case .wueste: return "Wüstenplanet ✦"
         case .peitsche: return "Peitsche 🤠 (knallt beim Klicken)"
+        case .yuzu: return "Yuzu Onsen ♨ (Pfeil, über Links Yuzu)"
         }
     }
     var imageName: String { self == .waschbaer ? "waschbaer-hand" : "zeigestock-hand" }
@@ -268,6 +269,7 @@ final class Overlay: NSObject, NSApplicationDelegate {
     let ufoFX = UfoFX()                // Design "UFO-Kuh-Entführung" (src/ufo.swift)
     let whipFX = WhipFX()              // Design "Peitsche" (src/peitsche.swift)
     let desertFX = DesertFX()          // Design "Wüstenplanet" (src/wueste.swift)
+    let yuzuFX = YuzuFX()              // Design "Yuzu Onsen" (src/yuzu.swift)
     var sprite: HandSprite?
     var statusItem: NSStatusItem!
     var modeItems: [Mode: NSMenuItem] = [:]
@@ -285,8 +287,7 @@ final class Overlay: NSObject, NSApplicationDelegate {
     lazy var pointingHand = NSCursor.pointingHand
 
     func applicationDidFinishLaunching(_ n: Notification) {
-        _ = CGSSetConnectionProperty(_CGSDefaultConnection(), _CGSDefaultConnection(),
-                                     "SetsCursorInBackground" as CFString, kCFBooleanTrue)
+        setCursorInBackground(false)        // erst beim Verstecken einschalten (siehe setCursorHidden)
         if let name = UserDefaults.standard.string(forKey: "customTheme"),
            let c = try? loadCustomTheme(folder: themesFolder().appendingPathComponent(name)) {
             custom = c
@@ -446,6 +447,7 @@ final class Overlay: NSObject, NSApplicationDelegate {
         view.layer!.addSublayer(skeletonFX.root)
         view.layer!.addSublayer(ufoFX.root)
         view.layer!.addSublayer(desertFX.root)
+        view.layer!.addSublayer(yuzuFX.root)
         view.layer!.addSublayer(whipFX.root)
         window.orderFrontRegardless()
     }
@@ -537,8 +539,7 @@ final class Overlay: NSObject, NSApplicationDelegate {
         let now = CACurrentMediaTime()
         if hide {
             guard force || !cursorHidden || now - lastHideAssert > 0.1 else { return }
-            _ = CGSSetConnectionProperty(_CGSDefaultConnection(), _CGSDefaultConnection(),
-                                         "SetsCursorInBackground" as CFString, kCFBooleanTrue)
+            setCursorInBackground(true)
             CGDisplayHideCursor(CGMainDisplayID())
             hideCount += 1
             if hideCount > 400 {
@@ -553,7 +554,17 @@ final class Overlay: NSObject, NSApplicationDelegate {
             guard cursorHidden else { return }
             while hideCount > 0 { CGDisplayShowCursor(CGMainDisplayID()); hideCount -= 1 }
             cursorHidden = false
+            setCursorInBackground(false)
         }
+    }
+
+    /// "SetsCursorInBackground": erlaubt dieser App, den Zeiger zu ändern, obwohl sie nicht vorne ist. Nötig zum
+    /// Verstecken – aber solange es an ist, setzt JEDER Zeiger, den die App intern setzt (z. B. die Webansichten des
+    /// Live-Hintergrunds), den echten Zeiger der vorderen App zurück -> Flackern zwischen Pfeil und Link-Hand/Textcursor.
+    /// Darum nur an, solange der eigene Zeiger gezeigt wird.
+    func setCursorInBackground(_ on: Bool) {
+        _ = CGSSetConnectionProperty(_CGSDefaultConnection(), _CGSDefaultConnection(),
+                                     "SetsCursorInBackground" as CFString, on ? kCFBooleanTrue : kCFBooleanFalse)
     }
 
     /// macOS blendet den Zeiger bei App-, Fenster- und Space-Wechseln gern wieder ein: sofort neu verstecken.
@@ -595,7 +606,7 @@ final class Overlay: NSObject, NSApplicationDelegate {
     func fade(to value: Float, duration: Double, done: @escaping () -> Void) {
         CATransaction.begin()
         CATransaction.setCompletionBlock(done)
-        for l in [hand, stick, fx.night, fx.glow, fx.top, spiderFX.root, laserFX.root, trainFX.root, feetFX.root, duckFX.root, skeletonFX.root, ufoFX.root, desertFX.root, whipFX.root] {
+        for l in [hand, stick, fx.night, fx.glow, fx.top, spiderFX.root, laserFX.root, trainFX.root, feetFX.root, duckFX.root, skeletonFX.root, ufoFX.root, desertFX.root, whipFX.root, yuzuFX.root] {
             let a = CABasicAnimation(keyPath: "opacity")
             a.fromValue = l.presentation()?.opacity ?? l.opacity
             a.toValue = value
@@ -665,7 +676,7 @@ final class Overlay: NSObject, NSApplicationDelegate {
         tracks.forEach { $0.update() }
         let mouse = NSEvent.mouseLocation
         let now = CACurrentMediaTime()
-        if mode == .links && (now - lastCursorCheck > 0.03 || mouse != lastMouse) {
+        if (mode == .links || (theme == .yuzu && mode != .off)) && (now - lastCursorCheck > 0.03 || mouse != lastMouse) {
             // während die eigene Hand sichtbar ist, ist der Systemzeiger versteckt – kurz einblenden
             // ist nicht nötig: currentSystem liefert trotzdem den Zeiger, den macOS zeigen würde
             lastCursorCheck = now
@@ -673,8 +684,8 @@ final class Overlay: NSObject, NSApplicationDelegate {
         }
         let lamp = theme == .halloween, spin = theme == .spinne, laser = theme == .addmore, train = theme == .zug
         let walk = theme == .fuesse, ducks = theme == .ente, cowsUFO = theme == .ufo, desert = theme == .wueste
-        let whip = theme == .peitsche
-        let halloween = lamp || spin || laser || train || walk || ducks || cowsUFO || desert || whip        // Effekt-Designs: immer an, außer im Modus "Aus"
+        let whip = theme == .peitsche, yuzu = theme == .yuzu
+        let halloween = lamp || spin || laser || train || walk || ducks || cowsUFO || desert || whip || yuzu        // Effekt-Designs: immer an, außer im Modus "Aus"
         let show = halloween ? (drawing || mode != .off)
                              : sprite != nil && (drawing || mode == .always || (mode == .links && overLink))
         let skel = theme == .skelett               // Skelett: Sichtbarkeit wie die Stab-Designs, eigener Kopf
@@ -700,6 +711,9 @@ final class Overlay: NSObject, NSApplicationDelegate {
         whipFX.setVisible(show && whip)
         whipFX.clicks = drawing                  // Peitsche knallt nur im Zeichenmodus
         whipFX.flicks = drawing
+        yuzuFX.setVisible(show && yuzu)
+        yuzuFX.clicks = !drawing
+        yuzuFX.overLink = overLink && !drawing
         guard show, halloween || skel || mouse != lastMouse || window.frame.isEmpty else { return }
         lastMouse = mouse
 
@@ -731,6 +745,8 @@ final class Overlay: NSObject, NSApplicationDelegate {
             desertFX.update(mouse: p)
         } else if whip {
             whipFX.update(mouse: p)
+        } else if yuzu {
+            yuzuFX.update(mouse: p)
         } else {
             placeHand(at: p)
         }
@@ -784,6 +800,20 @@ final class Overlay: NSObject, NSApplicationDelegate {
             whipFX.root.sublayers?.forEach { if $0.animation(forKey: "burst") != nil { $0.removeFromSuperlayer() } }
             if let tip = whipFX.pts.last { whipFX.burst(at: tip, frozen: true) }
             whipFX.handle.removeAllAnimations()
+        } else if theme == .yuzu {
+            hand.isHidden = true
+            stick.isHidden = true
+            yuzuFX.setVisible(true)
+            yuzuFX.update(mouse: CGPoint(x: 230, y: 430))              // normal: Pfeil
+            yuzuFX.overLink = true                                     // daneben der Zeiger über einem Link
+            yuzuFX.switchLook(toLink: true, animated: false)
+            yuzuFX.fruit.position = CGPoint(x: 460, y: 330)
+            yuzuFX.arrow.opacity = 1
+            yuzuFX.ripple(at: CGPoint(x: 460, y: 330))
+            yuzuFX.root.sublayers?.forEach { l in
+                if l.animation(forKey: "ripple") != nil { l.removeAllAnimations(); l.opacity = 0.9; l.transform = CATransform3DMakeScale(2, 2, 1) }
+            }
+            yuzuFX.steam.sublayers?.forEach { $0.removeAllAnimations(); $0.opacity = 0.8; $0.position.y = 17 }
         } else if theme == .wueste {
             hand.isHidden = true
             stick.isHidden = true

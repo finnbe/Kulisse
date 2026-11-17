@@ -55,12 +55,17 @@ Designs (im 🦝-Menü umschaltbar)
                 Dabei wird kein Strich gezeichnet. Geräusch: peitsche-knall.mp3 in diesem Ordner (austauschbar;
                 bei anderer Datei WHIP_SOUND_BANG = Sekunde des Knalls anpassen). Lautstärke: WHIP_VOLUME, Bewegung:
                 WHIP_FLICK_SPEED (kleiner = knallt leichter) oben in src/peitsche.swift.
+  Yuzu Onsen ♨ - passend zum Live-Hintergrund Yuzu Onsen. Zwei Zeiger: normal ein gemalter Pfeil (Elfenbein,
+                Tusche-Kontur, Kirschblüte am Flügel; Klickpunkt = Spitze), über allem Klickbaren (wo macOS die
+                Link-Hand zeigt) eine Yuzu mit Blatt, Laternenschein und Dampf (Klickpunkt = Mitte). Schnelle
+                Bewegung lässt Kirschblütenblätter davonsegeln, Klick = flache Wasserringe. Farben in src/yuzu.swift.
 
   Strich im Zeichenmodus (Ctrl+Option+V) je nach Design:
     Zeigestock + Waschbär hält Stab: Neon-Orange      Waschbär: Pfotenspur 🐾      Taschenlampe: grüner Leucht-Schleim
     Spinne: weißer Spinnenfaden     addmore: halbdurchsichtiger oranger Textmarker     Zug: Schienen + Zug
     Grüne Füße: grüne Fußspur      Ente: Teich-blaue Linie      Skelett: schwarzer Strich mit Leuchtrand
     UFO: Kuhflecken-Strich      Wüstenplanet: feine goldene Linie      Peitsche: kein Strich, nur Knall
+    Yuzu Onsen: yuzu-gelbe Linie mit warmem Schein
     (Einstellungen: strokeStyle in src/addmore.swift)
   Ein Bild austauschen: neue Datei mit demselben Namen in diesen Ordner legen (neben die App),
   dann das Design im 🦝-Menü einmal neu anklicken (lädt das Bild neu). Finger zeigt senkrecht nach oben, transparenter Hintergrund.
