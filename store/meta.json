@@ -1,0 +1,45 @@
+{
+  "_doc": "Texte für den Store (kulisse.finnegan-berz.com). Jeder Hintergrund in wallpapers/ und jedes Design in themes/ braucht hier einen Eintrag – sonst bricht store/make-store.sh ab. Reihenfolge = Reihenfolge im Store.",
+  "wallpapers": [
+    {
+      "id": "onsen-panorama",
+      "title": "Yuzu Onsen Panorama",
+      "screens": 3,
+      "description": "Der Onsen über bis zu drei Bildschirme: links ein verschneiter Bambusgarten mit Steinbecken, in der Mitte das dampfende Becken, rechts die Veranda des Ryokan. Mit zwei Bildschirmen Onsen und Veranda."
+    },
+    {
+      "id": "onsen",
+      "title": "Yuzu Onsen",
+      "description": "Eine heiße Quelle im Schnee, von oben gesehen. Wellen unter der Maus, Dampf zum Wegwischen, treibende Yuzus, Schnee oder Regen und Laternen, die abends angehen. Reagiert auf Musik."
+    },
+    {
+      "id": "nishiki",
+      "title": "Nishiki",
+      "description": "Ein Koi-Teich von oben: Licht auf den Kieseln, treibende Seerosen und Kirschblüten. Ein Klick füttert die Koi, die Maus zieht Wellen. Der Teich folgt der Uhrzeit bis zur Mondnacht mit Glühwürmchen.",
+      "credit": { "name": "ReeZ", "url": "https://wallpapers.reez.cc/" }
+    }
+  ],
+  "pointers": [
+    {
+      "file": "Skelett Totenkopf.pointertheme",
+      "id": "skelett-totenkopf",
+      "title": "Skelett Totenkopf",
+      "description": "Gezeichneter Schädel mit glühenden Augen am Skelett-Zeiger. Das Skelett hängt mit Physik an der Maus, rennt mit und zappelt beim Fallen.",
+      "credit": { "name": "Skelett nach dem Windows-Lava-Pointer" }
+    },
+    {
+      "file": "Lava Hand.pointertheme",
+      "id": "lava-hand",
+      "title": "Lava Hand",
+      "description": "Glühende Hand auf dem Teleskop-Zeigestock, im Zeichenmodus ein oranger Leuchtstrich.",
+      "credit": { "name": "Hand aus dem Windows-Lava-Pointer" }
+    },
+    {
+      "file": "Schnee Hand.pointertheme",
+      "id": "schnee-hand",
+      "title": "Schnee Hand",
+      "description": "Vereiste Hand auf dem Teleskop-Zeigestock, im Zeichenmodus ein eisblauer Leuchtstrich.",
+      "credit": { "name": "Hand aus dem Windows-Lava-Pointer" }
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "format": 1,
+  "repo": "finnbe/Kulisse",
+  "release": "latest",
+  "app": {
+    "file": "Kulisse-macOS.zip"
+  },
+  "wallpapers": [
+    {
+      "id": "onsen-panorama",
+      "title": "Yuzu Onsen Panorama",
+      "description": "Der Onsen über bis zu drei Bildschirme: links ein verschneiter Bambusgarten mit Steinbecken, in der Mitte das dampfende Becken, rechts die Veranda des Ryokan. Mit zwei Bildschirmen Onsen und Veranda.",
+      "screens": 3,
+      "preview": "wallpapers/onsen-panorama/preview.jpg",
+      "files": {
+        "kulisse": "wallpaper-onsen-panorama.wallpapertheme",
+        "engine": "wallpaper-onsen-panorama.zip"
+      }
+    },
+    {
+      "id": "onsen",
+      "title": "Yuzu Onsen",
+      "description": "Eine heiße Quelle im Schnee, von oben gesehen. Wellen unter der Maus, Dampf zum Wegwischen, treibende Yuzus, Schnee oder Regen und Laternen, die abends angehen. Reagiert auf Musik.",
+      "screens": 1,
+      "preview": "wallpapers/onsen/preview.jpg",
+      "files": {
+        "kulisse": "wallpaper-onsen.wallpapertheme",
+        "engine": "wallpaper-onsen.zip"
+      }
+    },
+    {
+      "id": "nishiki",
+      "title": "Nishiki",
+      "description": "Ein Koi-Teich von oben: Licht auf den Kieseln, treibende Seerosen und Kirschblüten. Ein Klick füttert die Koi, die Maus zieht Wellen. Der Teich folgt der Uhrzeit bis zur Mondnacht mit Glühwürmchen.",
+      "screens": 1,
+      "preview": "wallpapers/nishiki/preview.jpg",
+      "files": {
+        "kulisse": "wallpaper-nishiki.wallpapertheme",
+        "engine": "wallpaper-nishiki.zip"
+      },
+      "credit": {
+        "name": "ReeZ",
+        "url": "https://wallpapers.reez.cc/"
+      }
+    }
+  ],
+  "pointers": [
+    {
+      "id": "skelett-totenkopf",
+      "title": "Skelett Totenkopf",
+      "description": "Gezeichneter Schädel mit glühenden Augen am Skelett-Zeiger. Das Skelett hängt mit Physik an der Maus, rennt mit und zappelt beim Fallen.",
+      "preview": "store/previews/pointer-skelett-totenkopf.png",
+      "file": "pointer-skelett-totenkopf.pointertheme",
+      "credit": {
+        "name": "Skelett nach dem Windows-Lava-Pointer"
+      }
+    },
+    {
+      "id": "lava-hand",
+      "title": "Lava Hand",
+      "description": "Glühende Hand auf dem Teleskop-Zeigestock, im Zeichenmodus ein oranger Leuchtstrich.",
+      "preview": "store/previews/pointer-lava-hand.png",
+      "file": "pointer-lava-hand.pointertheme",
+      "credit": {
+        "name": "Hand aus dem Windows-Lava-Pointer"
+      }
+    },
+    {
+      "id": "schnee-hand",
+      "title": "Schnee Hand",
+      "description": "Vereiste Hand auf dem Teleskop-Zeigestock, im Zeichenmodus ein eisblauer Leuchtstrich.",
+      "preview": "store/previews/pointer-schnee-hand.png",
+      "file": "pointer-schnee-hand.pointertheme",
+      "credit": {
+        "name": "Hand aus dem Windows-Lava-Pointer"
+      }
+    }
+  ]
+}
