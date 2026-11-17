@@ -24,6 +24,10 @@ Neuer Hintergrund oder neues Design: Eintrag mit deutschem Text in `store/meta.j
 unter `store/previews/`), dann `store/make-store.sh` ausführen und `store/catalog.json` mit einchecken – die Pipeline
 prüft, dass der Katalog aktuell ist.
 
+Die eingebauten Zeiger (Ente, UFO, Zug …) zeigt der Store als animierte Vorschau. Die Bilder rendert
+`store/render/render-pointers.sh` offscreen mit dem echten Design-Code aus `src/` (simulierte Mausbahn und Klicks,
+kein Bildschirm nötig) – nach Änderungen an einem Design neu ausführen und `store/make-store.sh` danach.
+
 ## Selbst bauen
 
 Braucht nur die Xcode Command Line Tools (`xcode-select --install`):

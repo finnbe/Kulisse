@@ -75,5 +75,101 @@
         "name": "Hand aus dem Windows-Lava-Pointer"
       }
     }
+  ],
+  "builtin": [
+    {
+      "id": "ente",
+      "title": "Ente mit Küken",
+      "description": "Eine Ente watschelt voraus, drei Küken laufen im Gänsemarsch hinterher und schlafen ein, wenn die Maus stillsteht. Zwischendurch liegt ein Ei herum – drüberfahren, und ein Küken schlüpft.",
+      "preview": "store/previews/builtin-ente.webp",
+      "still": "store/previews/builtin-ente-still.png"
+    },
+    {
+      "id": "ufo",
+      "title": "UFO-Kuh-Entführung",
+      "description": "Ein wackelndes UFO mit Traktorstrahl. Fliegt es tief über eine Kuh, wird sie hochgebeamt; bei fünf Kühen wirft es alle an Fallschirmen wieder ab.",
+      "preview": "store/previews/builtin-ufo.webp",
+      "still": "store/previews/builtin-ufo-still.png"
+    },
+    {
+      "id": "zug",
+      "title": "Zug",
+      "description": "Eine kleine Dampflok ist der Zeiger. Im Zeichenmodus werden aus dem Strich Schienen, und eine Sekunde später fährt ein Zug die Strecke nach.",
+      "preview": "store/previews/builtin-zug.webp",
+      "still": "store/previews/builtin-zug-still.png"
+    },
+    {
+      "id": "peitsche",
+      "title": "Peitsche",
+      "description": "Eine Lederpeitsche schwingt mit Seil-Physik am Zeiger. Im Zeichenmodus knallt sie bei jedem Klick oder schnellen Schwung – mit Ton.",
+      "preview": "store/previews/builtin-peitsche.webp",
+      "still": "store/previews/builtin-peitsche-still.png"
+    },
+    {
+      "id": "skelett",
+      "title": "Skelett",
+      "description": "Ein Kopf an einer Nadel, darunter hängt ein leuchtendes Skelett: Es rennt mit, reißt beim Hochfahren die Arme hoch und zappelt beim Fallen.",
+      "preview": "store/previews/builtin-skelett.webp",
+      "still": "store/previews/builtin-skelett-still.png",
+      "credit": {
+        "name": "nach dem Windows-Lava-Pointer"
+      }
+    },
+    {
+      "id": "halloween",
+      "title": "Halloween: Taschenlampe",
+      "description": "Der Bildschirm wird dunkel, um die Maus flackert ein Lichtkegel. Der Zeiger ist ein Kürbis, ein Geist schwebt hinterher, bei jedem Klick fliegen Fledermäuse los.",
+      "preview": "store/previews/builtin-halloween.webp",
+      "still": "store/previews/builtin-halloween-still.png"
+    },
+    {
+      "id": "spinne",
+      "title": "Halloween: Spinne",
+      "description": "Eine Spinne am Faden ist der Zeiger und schwingt beim Bewegen nach. Jeder Klick spinnt ein kleines Netz – so sieht man, wo geklickt wurde.",
+      "preview": "store/previews/builtin-spinne.webp",
+      "still": "store/previews/builtin-spinne-still.png"
+    },
+    {
+      "id": "wueste",
+      "title": "Wüstenplanet",
+      "description": "Ein dezentes Visier, beim Bewegen rieselt feiner Sand, im Stillstand glimmt die Raute blau. Klicks schicken Ringe durch den Sand.",
+      "preview": "store/previews/builtin-wueste.webp",
+      "still": "store/previews/builtin-wueste-still.png"
+    },
+    {
+      "id": "fuesse",
+      "title": "Grüne Füße",
+      "description": "Ein grüner Fußabdruck zieht eine Spur, die langsam verblasst. Beim Klick stampft der Fuß auf.",
+      "preview": "store/previews/builtin-fuesse.webp",
+      "still": "store/previews/builtin-fuesse-still.png"
+    },
+    {
+      "id": "addmore",
+      "title": "addmore (Laserpointer)",
+      "description": "Ein leuchtender oranger Punkt mit Plus und kurzem Schweif; jeder Klick schickt Ringe nach außen.",
+      "preview": "store/previews/builtin-addmore.webp",
+      "still": "store/previews/builtin-addmore-still.png"
+    },
+    {
+      "id": "zeigestock",
+      "title": "Zeigestock",
+      "description": "Eine weiße Hand auf einem Teleskop-Zeigestock – das Standard-Design. Im Zeichenmodus ein neonoranger Strich.",
+      "preview": "store/previews/builtin-zeigestock-still.png",
+      "still": "store/previews/builtin-zeigestock-still.png"
+    },
+    {
+      "id": "waschbaer",
+      "title": "Waschbär",
+      "description": "Eine fellige Waschbärhand zeigt auf die Folie, im Zeichenmodus bleibt eine Pfotenspur.",
+      "preview": "store/previews/builtin-waschbaer-still.png",
+      "still": "store/previews/builtin-waschbaer-still.png"
+    },
+    {
+      "id": "halter",
+      "title": "Waschbär hält Stab",
+      "description": "Der Zeigestock, unten hält eine Waschbärpfote den Griff.",
+      "preview": "store/previews/builtin-halter-still.png",
+      "still": "store/previews/builtin-halter-still.png"
+    }
   ]
 }
