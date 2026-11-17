@@ -97,6 +97,7 @@
   uniform float uT, uZoom, uSteam, uFlicker, uBass, uHigh, uTod, uRainy;
   uniform vec4 uFloat[${MAX_FLOAT}];   // u, v, Radius, Drehung
   uniform float uKind[${MAX_FLOAT}];   // 0 Yuzu, 1 Kirschblütenblatt, 2 Ahornblatt
+  uniform vec3 uLight;                 // Schatten auf dem Grund: Versatz (in Radien) und Stärke – folgt der Tageszeit
 
   float h21(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
   float noise(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
@@ -174,8 +175,10 @@
         float dayK = 0.85 + 0.15 * float(uTod > 0.0);
         if (kind < 0.5) {
           // Yuzu: Kugel mit Poren, Glanzpunkt, Stiel und Blättchen
-          float sh = smoothstep(1.25, 0.6, length(d - vec2(-0.35, -0.45)));
-          under *= 1.0 - sh * 0.35;
+          // Schatten auf dem Grund: an der gebrochenen Stelle (wabert mit den Wellen), Richtung nach Tageszeit
+          vec2 ds = (ruv - y.xy) * vec2(ia, 1.0) / (y.z * sAt(y.y));
+          float sh = smoothstep(1.35, 0.45, length((ds - uLight.xy) * vec2(1.0, 1.0 / CV)));
+          under *= 1.0 - sh * uLight.z;
           float r = length(d);
           if (r < 1.0) {
             vec3 nn = vec3(d, sqrt(1.0 - r * r));
@@ -191,9 +194,7 @@
           }
         } else if (kind < 1.5) {
           // Kirschblütenblatt: Oval mit Kerbe an der Spitze, zur Mitte hin heller
-          vec2 q = rd;
-          float sh = smoothstep(1.1, 0.7, length((q - vec2(-0.3, -0.35)) * vec2(1.5, 1.0)));
-          under *= 1.0 - sh * 0.18;
+          vec2 q = rd;                                  // dünn und durchscheinend: kein Schatten auf dem tiefen Grund
           float body = length(q * vec2(1.55, 1.0));
           float notch = length((q - vec2(0.0, 1.0)) * vec2(1.0, 1.4));
           float m = smoothstep(1.0, 0.9, body) * smoothstep(0.22, 0.32, notch);
@@ -210,8 +211,10 @@
           float lobe = 0.55 + 0.45 * pow(abs(cos(ang * 2.5)), 0.6);
           lobe *= smoothstep(3.14, 2.4, abs(ang)) * 0.6 + 0.4;
           float rr2 = length(q);
-          float sh = smoothstep(1.0, 0.6, length(q - vec2(-0.3, -0.35)) / max(lobe, 0.3));
-          under *= 1.0 - sh * 0.25;
+          vec2 ds = (ruv - y.xy) * vec2(ia, 1.0) / (y.z * sAt(y.y)) - uLight.xy;
+          ds.y /= CV;
+          float sh = smoothstep(1.0, 0.35, length(ds));
+          under *= 1.0 - sh * uLight.z * 0.55;
           float m = smoothstep(lobe, lobe - 0.08, rr2);
           float stem = smoothstep(0.06, 0.03, abs(q.x)) * step(0.0, q.y) * step(q.y, 0.75);
           if (m > 0.0 || stem > 0.0) {
@@ -280,7 +283,7 @@
     if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
     gl.useProgram(prog);
     for (const n of ['uScene', 'uMask', 'uFog', 'uEmit', 'uWave', 'uRes', 'uImg', 'uPan', 'uWaveRes', 'uT', 'uZoom', 'uSteam',
-      'uFlicker', 'uBass', 'uHigh', 'uTod', 'uRainy', 'uFloat', 'uKind', 'uPlane']) uni[n] = gl.getUniformLocation(prog, n);
+      'uFlicker', 'uBass', 'uHigh', 'uTod', 'uRainy', 'uFloat', 'uKind', 'uPlane', 'uLight']) uni[n] = gl.getUniformLocation(prog, n);
     const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
@@ -291,8 +294,12 @@
     const sharp = document.createElement('canvas'); sharp.width = MW; sharp.height = MH;
     const s = sharp.getContext('2d');
     s.fillStyle = '#000'; s.fillRect(0, 0, MW, MH);
-    s.fillStyle = '#fff'; for (const p of SC.water) poly(s, p, MW, MH);
-    s.fillStyle = '#000'; for (const p of SC.cut || []) poly(s, p, MW, MH);
+    if (maskImg) {
+      s.drawImage(maskImg, 0, 0, MW, MH);           // genaue Graustufen-Maske (weiß = Wasser)
+    } else {
+      s.fillStyle = '#fff'; for (const p of SC.water) poly(s, p, MW, MH);
+      s.fillStyle = '#000'; for (const p of SC.cut || []) poly(s, p, MW, MH);
+    }
     const soft = document.createElement('canvas'); soft.width = MW; soft.height = MH;
     const so = soft.getContext('2d'); so.filter = 'blur(28px)'; so.drawImage(sharp, 0, 0); so.drawImage(sharp, 0, 0); so.filter = 'none';
     const sb = document.createElement('canvas'); sb.width = MW; sb.height = MH;
@@ -304,7 +311,11 @@
     texMask = makeTex(sb, false);
     // Wellen-Gitter auf der Wasserfläche: Ausdehnung aus dem Becken-Umriss, 512 Zellen in der Breite
     let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
-    for (const poly of SC.water) for (const pt of poly) { const q = toPlane(pt[0], pt[1]); x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); }
+    for (let py = 0; py < MH; py += 2) for (let px = 0; px < MW; px += 2) {
+      if (maskData[(py * MW + px) * 4] <= 140) continue;
+      const q = toPlane((px + 0.5) / MW, (py + 0.5) / MH);
+      x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]);
+    }
     const pad = 0.02; x0 -= pad; y0 -= pad; x1 += pad; y1 += pad;
     GW = 512; CELL = (x1 - x0) / GW; GH = Math.ceil((y1 - y0) / CELL); PX0 = x0; PY0 = y0;
     h0 = new Float32Array(GW * GH); h1 = new Float32Array(GW * GH); wmask = new Uint8Array(GW * GH); waveBytes = new Uint8Array(GW * GH * 4);
@@ -357,7 +368,7 @@
   }
   function newFloater(u, v, kind) {
     const sz = SIZE[kind];
-    return { u, v, vu: 0, vv: 0, kind, r: sz[0] + Math.random() * sz[1], rot: Math.random() * 6.28,
+    return { u, v, vu: 0, vv: 0, kind, r: sz[0] + Math.random() * sz[1], rot: Math.random() * 6.28, rot0: Math.random() * 6.28,
              spin: (Math.random() - 0.5) * (kind === KIND.yuzu ? 0.3 : 0.9), bob: Math.random() * 6.28 };
   }
 
@@ -466,14 +477,31 @@
       const dx = (y.u - cx) * IA, dy = y.v - cy, d = Math.hypot(dx, dy) + 1e-4;
       const light = y.kind === KIND.yuzu ? 1 : 2.2;      // Blätter treiben leichter
       y.vu += (-dy / d) * 0.0025 * light * dt / IA; y.vv += (dx / d) * 0.0025 * light * dt;
+      // sanft zur Mitte – aber erst im äußeren Bereich; innen treibt alles frei
+      const pull = 0.0016 * light * Math.max(0, Math.min(1, (d - 0.2) / 0.12));
+      y.vu -= (dx / d) * pull * dt / IA; y.vv -= (dy / d) * pull * dt;
+      // Rand: Wasser schiebt weich zurück, bevor es an die Steine stößt (8 Fühler rundum)
+      const probe = 0.035 + y.r;
+      for (let k = 0; k < 8; k++) {
+        const a = k * Math.PI / 4, px = Math.cos(a), py = Math.sin(a);
+        if (!inWater(y.u + px * probe / IA, y.v + py * probe)) { y.vu -= px * 0.007 * light * dt / IA; y.vv -= py * 0.007 * light * dt; }
+      }
+      // leichtes Umherirren, jedes Objekt anders
+      y.vu += Math.sin(time * 0.31 + y.rot0) * 0.0018 * light * dt / IA;
+      y.vv += Math.cos(time * 0.23 + y.rot0 * 1.7) * 0.0018 * light * dt;
       const e = 0.006;
       y.vu -= (heightAt(y.u + e, y.v) - heightAt(y.u - e, y.v)) * 0.03 * light * dt;
       y.vv -= (heightAt(y.u, y.v + e) - heightAt(y.u, y.v - e)) * 0.03 * light * dt;
       y.vu *= Math.pow(0.6, dt); y.vv *= Math.pow(0.6, dt);
       // gegenseitig abstoßen
-      if (y.kind === KIND.yuzu) for (const o of yuzus) if (o !== y && o.kind === KIND.yuzu) {
-        const ox = (y.u - o.u) * IA, oy = y.v - o.v, od = Math.hypot(ox, oy), min = (y.r + o.r) * 1.1 * sAt(y.v);
-        if (od < min && od > 1e-5) { const k = (min - od) / od * 0.5; y.u += ox * k / IA * 0.5; y.v += oy * k * 0.5; }
+      for (const o of yuzus) if (o !== y) {
+        const both = y.kind === KIND.yuzu && o.kind === KIND.yuzu;
+        const ox = (y.u - o.u) * IA, oy = y.v - o.v, od = Math.hypot(ox, oy);
+        const min = (y.r + o.r) * (both ? 1.1 : 1.6) * sAt(y.v);
+        if (od < min && od > 1e-5) {
+          if (both) { const k = (min - od) / od * 0.5; y.u += ox * k / IA * 0.5; y.v += oy * k * 0.5; }
+          else { const k = (min - od) / min * 0.004 * light; y.vu += ox / od * k * dt * 60 / IA * 0.1; y.vv += oy / od * k * dt * 60 * 0.1; }
+        }
       }
       const ps = sAt(y.v);                                  // hinten treibt alles langsamer übers Bild
       let nu = y.u + y.vu * dt * ps, nv = y.v + y.vv * dt * ps * CV;
@@ -549,7 +577,16 @@
     gl.uniform1f(uni.uFlicker, cfg.flicker);
     gl.uniform1f(uni.uBass, audio.bass * cfg.react);
     gl.uniform1f(uni.uHigh, audio.high * cfg.react);
-    gl.uniform1f(uni.uTod, tod());
+    const td = tod();
+    gl.uniform1f(uni.uTod, td);
+    // Licht für die Schatten: Tag = Sonne hoch von links oben (kurz, deutlich), Abend = flach von links (lang, weich),
+    // Nacht = kaum Schatten (nur Laternen); bei Regen diffus -> schwächer
+    {
+      const day = Math.max(0, td), dusk = 1 - Math.abs(td), night = Math.max(0, -td);
+      const ox = -0.35 * day - 1.1 * dusk - 0.2 * night, oy = -0.5 * day - 0.35 * dusk - 0.2 * night;
+      const str = (0.38 * day + 0.26 * dusk + 0.06 * night) * (cfg.weather === 'rain' ? 1 - 0.6 * cfg.amount : 1);
+      gl.uniform3f(uni.uLight, ox, oy, str);
+    }
     gl.uniform1f(uni.uRainy, cfg.weather === 'rain' ? cfg.amount : 0);
     gl.uniform4f(uni.uPlane, PX0, PY0, GW * CELL, GH * CELL);
     const yp = new Float32Array(MAX_FLOAT * 4), yk = new Float32Array(MAX_FLOAT);
@@ -655,9 +692,17 @@
     setPaused: function (x) { const was = paused; paused = !!x; if (was && !paused && img) { last = performance.now(); requestAnimationFrame(frame); } },
   };
 
+  let maskImg = null;
   img = new Image();
   img.onload = () => {
     IA = img.width / img.height;
+    if (SC.waterMask && !maskImg) {                  // erst die Maske laden, dann aufbauen
+      maskImg = new Image();
+      maskImg.onload = img.onload;
+      maskImg.onerror = () => { maskImg = null; img.onload(); };
+      maskImg.src = SC.waterMask;
+      return;
+    }
     setup(); resize();
     window.addEventListener('resize', resize);
     last = performance.now(); requestAnimationFrame(frame);
