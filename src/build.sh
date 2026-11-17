@@ -20,6 +20,7 @@ compile() {
 }
 compile "$APP/Contents/MacOS/Kulisse" main.swift halloween.swift addmore.swift zug.swift fuesse.swift ente.swift themes.swift skelett.swift ufo.swift wueste.swift peitsche.swift wallpaper.swift wallpaper_ui.swift wallpaper_audio.swift -framework Cocoa -framework Carbon -framework AVFoundation -framework WebKit -framework IOKit -framework CoreAudio -framework AudioToolbox -framework Accelerate
 cp platzhalter-hand.png "$APP/Contents/Resources/"
+cp AppIcon.icns "$APP/Contents/Resources/"          # App-Symbol (Vorhang mit Mondnacht, lokal mit Z-Image-Turbo erzeugt)
 # Live-Hintergründe (Ordner wallpapers/ neben src/)
 [ -d ../wallpapers ] && ditto --norsrc ../wallpapers "$APP/Contents/Resources/wallpapers"
 for f in ../*-hand.png ../*-halter.png ../*-halter.json ../*.mp3; do [ -f "$f" ] && cp "$f" "$APP/Contents/Resources/"; done
@@ -31,6 +32,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>CFBundleDisplayName</key><string>Kulisse</string>
   <key>CFBundleIdentifier</key><string>local.kulisse.app</string>
   <key>CFBundleExecutable</key><string>Kulisse</string>
+  <key>CFBundleIconFile</key><string>AppIcon</string>
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleShortVersionString</key><string>${VERSION:-1.0}</string>
   <key>CFBundleVersion</key><string>${BUILD_NUMBER:-1}</string>

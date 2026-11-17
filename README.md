@@ -1,5 +1,7 @@
 # Kulisse
 
+<img src="src/AppIcon.png" width="128" alt="Kulisse-Symbol">
+
 Menüleisten-App für macOS: **Zeiger-Designs für Präsentationen** (Waschbär, Laserpointer, Ente mit Küken, UFO …)
 und **Live-Hintergründe** für den Schreibtisch im Wallpaper-Engine-Format (Koi-Teich, Yuzu Onsen), mit
 Musikreaktion, Sperrbildschirm-Standbild und eigenem Bildschirmschoner.

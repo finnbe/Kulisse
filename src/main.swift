@@ -346,6 +346,20 @@ final class Overlay: NSObject, NSApplicationDelegate {
             WallpaperSettings.shared.renderPreview(to: args[i + 1])
             exit(0)
         }
+        if let i = args.firstIndex(of: "--menu-icon-preview"), i + 1 < args.count {   // nur zum Testen: Menüleisten-Symbol groß
+            let icon = kulisseMenuIcon()
+            let out = NSImage(size: NSSize(width: 400, height: 180))
+            out.lockFocus()
+            for (k, (bg, fg)) in [(NSColor(white: 0.93, alpha: 1), NSColor.black), (NSColor(white: 0.16, alpha: 1), NSColor.white)].enumerated() {
+                bg.setFill(); NSRect(x: CGFloat(k) * 200, y: 0, width: 200, height: 180).fill()
+                let tinted = NSImage(size: icon.size, flipped: false) { r in icon.draw(in: r); fg.set(); r.fill(using: .sourceAtop); return true }
+                tinted.draw(in: NSRect(x: CGFloat(k) * 200 + 30, y: 25, width: 140, height: 126))
+                tinted.draw(in: NSRect(x: CGFloat(k) * 200 + 150, y: 150, width: 20, height: 18))   // Originalgröße
+            }
+            out.unlockFocus()
+            if let t = out.tiffRepresentation, let r = NSBitmapImageRep(data: t) { try? r.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: args[i + 1])) }
+            exit(0)
+        }
         if args.contains("--dump-wallpaper-menu") {   // nur zum Testen: Menüaufbau als Text
             WallpaperManager.shared.reloadPackages()
             func dump(_ m: NSMenu, _ d: Int) {
@@ -977,7 +991,9 @@ final class Overlay: NSObject, NSApplicationDelegate {
     // ---------- Menüleiste ----------
     func buildMenu() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        statusItem.button?.title = "🦝"
+        statusItem.button?.image = kulisseMenuIcon()
+        statusItem.button?.imagePosition = .imageLeading
+        statusItem.button?.title = ""
         let menu = NSMenu()
         menu.addItem(WallpaperManager.shared.makeMenuItem())      // Untermenü Live-Hintergrund (src/wallpaper_ui.swift)
         menu.addItem(.separator())
@@ -1041,7 +1057,8 @@ final class Overlay: NSObject, NSApplicationDelegate {
         for item in customItems { item.state = (item.representedObject as? String) == custom?.folder.path ? .on : .off }
         deleteThemeItem?.isHidden = custom == nil
         drawItem?.state = drawing ? .on : .off
-        statusItem?.button?.title = (theme == .halloween ? "🎃" : theme == .spinne ? "🕷️" : theme == .addmore ? "🟠" : theme == .zug ? "🚂" : theme == .fuesse ? "👣" : theme == .ente ? "🦆" : theme == .skelett ? "💀" : theme == .ufo ? "🛸" : theme == .wueste ? "✦" : theme == .peitsche ? "🤠" : "🦝") + (drawing ? "✏️" : "")
+        // Menüleiste: immer das Kulisse-Symbol (Vorhang mit Mond), im Zeichenmodus mit Stift daneben
+        statusItem?.button?.title = drawing ? " ✏️" : ""
         statusItem?.button?.appearsDisabled = mode == .off && !drawing
         statusItem?.menu?.item(withTag: 99)?.title = "Bild: " + (sprite?.source ?? "keins gefunden")
         if #available(macOS 13.0, *) { loginItem?.state = SMAppService.mainApp.status == .enabled ? .on : .off }
@@ -1113,6 +1130,59 @@ final class Overlay: NSObject, NSApplicationDelegate {
         RegisterEventHotKey(UInt32(kVK_ANSI_L), UInt32(controlKey | optionKey | cmdKey), EventHotKeyID(signature: 0x52434E50, id: 4),
                             GetApplicationEventTarget(), 0, &ref)
     }
+}
+
+/// Symbol für die Menüleiste im Stil des App-Logos: Vorhang mit Mond und Welle.
+/// Als Vorlage (isTemplate) gezeichnet -> macOS färbt es passend zu hellem/dunklem Modus, wie seine eigenen Symbole.
+func kulisseMenuIcon() -> NSImage {
+    let img = NSImage(size: NSSize(width: 20, height: 18), flipped: true) { r in
+        NSColor.black.setFill()
+        NSColor.black.setStroke()
+        // Volant oben mit Bögen
+        let val = NSBezierPath()
+        val.move(to: NSPoint(x: 0.5, y: 0.8)); val.line(to: NSPoint(x: 19.5, y: 0.8)); val.line(to: NSPoint(x: 19.5, y: 3.0))
+        for k in 0..<4 {
+            let xa = 19.5 - CGFloat(k) * 19 / 4, xb = xa - 19 / 4
+            val.curve(to: NSPoint(x: xb, y: 3.0), controlPoint1: NSPoint(x: xa - 1.0, y: 4.6), controlPoint2: NSPoint(x: xb + 1.0, y: 4.6))
+        }
+        val.close(); val.fill()
+        // Vorhänge: oben breit, in der Mitte gerafft (Kordel = kleine Lücke), unten ausgestellt
+        for side in [CGFloat(1), -1] {
+            let x0: CGFloat = side > 0 ? 0.5 : 19.5
+            let c = NSBezierPath()
+            c.move(to: NSPoint(x: x0, y: 3.5))
+            c.line(to: NSPoint(x: x0 + side * 4.6, y: 3.5))
+            c.curve(to: NSPoint(x: x0 + side * 1.9, y: 10.2), controlPoint1: NSPoint(x: x0 + side * 4.2, y: 6.8), controlPoint2: NSPoint(x: x0 + side * 1.9, y: 8.6))
+            c.line(to: NSPoint(x: x0, y: 10.2)); c.close(); c.fill()
+            let f = NSBezierPath()
+            f.move(to: NSPoint(x: x0, y: 11.4))
+            f.line(to: NSPoint(x: x0 + side * 1.9, y: 11.4))
+            f.curve(to: NSPoint(x: x0 + side * 3.2, y: 17.2), controlPoint1: NSPoint(x: x0 + side * 2.0, y: 13.5), controlPoint2: NSPoint(x: x0 + side * 3.2, y: 15.5))
+            f.line(to: NSPoint(x: x0, y: 17.2)); f.close(); f.fill()
+        }
+        // Mondsichel oben rechts
+        NSGraphicsContext.saveGraphicsState()
+        let cut = NSBezierPath(rect: NSRect(x: 0, y: 0, width: 20, height: 18))
+        cut.append(NSBezierPath(ovalIn: NSRect(x: 12.1, y: 4.0, width: 4.0, height: 4.0)))
+        cut.windingRule = .evenOdd
+        cut.addClip()                                   // alles außer dem zweiten Kreis -> Sichel
+        NSBezierPath(ovalIn: NSRect(x: 10.6, y: 4.9, width: 4.4, height: 4.4)).fill()
+        NSGraphicsContext.restoreGraphicsState()
+        // zwei Wellen (Teich)
+        for (y, x0, x1) in [(CGFloat(12.8), CGFloat(5.6), CGFloat(14.4)), (15.6, 7.0, 13.0)] {
+            let w = NSBezierPath()
+            let m = (x0 + x1) / 2, q = (x1 - x0) / 4
+            w.move(to: NSPoint(x: x0, y: y))
+            w.curve(to: NSPoint(x: m, y: y), controlPoint1: NSPoint(x: x0 + q * 0.8, y: y - 1.3), controlPoint2: NSPoint(x: m - q * 0.8, y: y - 1.3))
+            w.curve(to: NSPoint(x: x1, y: y), controlPoint1: NSPoint(x: m + q * 0.8, y: y + 1.3), controlPoint2: NSPoint(x: x1 - q * 0.8, y: y + 1.3))
+            w.lineWidth = 1.15; w.lineCapStyle = .round
+            w.stroke()
+        }
+        return true
+    }
+    img.isTemplate = true
+    img.accessibilityDescription = "Kulisse"
+    return img
 }
 
 /// Umzug von „Waschbär Pointer“ (local.waschbaer.pointer) nach „Kulisse“: Einstellungen und
