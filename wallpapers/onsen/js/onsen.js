@@ -147,6 +147,8 @@
       vec2 n = gr * 1.6 + ripple * 0.008;
       // Verschiebung im Bild: vorne stärker, in der Höhe gestaucht
       vec2 ruv = iuv + n * 0.035 * water * vec2(1.0, CV) * sv;
+      // nur aus dem Wasser heraus brechen: am Ufer keine Steinfarbe ins Wasser ziehen
+      ruv = mix(iuv, ruv, smoothstep(0.5, 0.95, texture(uMask, ruv).r));
       vec3 under = texture(uScene, ruv).rgb;
       // Lichtspiel am Grund (auf der Fläche -> hinten feiner)
       float ca = caustic(pl * 0.9 + n * 0.02, t);
@@ -301,12 +303,12 @@
       s.fillStyle = '#000'; for (const p of SC.cut || []) poly(s, p, MW, MH);
     }
     const soft = document.createElement('canvas'); soft.width = MW; soft.height = MH;
-    const so = soft.getContext('2d'); so.filter = 'blur(28px)'; so.drawImage(sharp, 0, 0); so.drawImage(sharp, 0, 0); so.filter = 'none';
+    const so = soft.getContext('2d'); so.drawImage(sharp, 0, 0); blurCanvas(soft, 12);   // Dampf läuft weich am Ufer aus
     const sb = document.createElement('canvas'); sb.width = MW; sb.height = MH;
-    const sbc = sb.getContext('2d'); sbc.filter = 'blur(1.5px)'; sbc.drawImage(sharp, 0, 0); sbc.filter = 'none';
+    const sbc = sb.getContext('2d'); sbc.drawImage(sharp, 0, 0); blurCanvas(sb, 0.8);
     maskData = s.getImageData(0, 0, MW, MH).data;
     const a = sbc.getImageData(0, 0, MW, MH), b = so.getImageData(0, 0, MW, MH);
-    for (let i = 0; i < a.data.length; i += 4) { a.data[i + 1] = Math.min(255, b.data[i] * 1.3); a.data[i + 2] = 0; a.data[i + 3] = 255; }
+    for (let i = 0; i < a.data.length; i += 4) { a.data[i + 1] = Math.min(255, b.data[i] * 1.15); a.data[i + 2] = 0; a.data[i + 3] = 255; }
     sbc.putImageData(a, 0, 0);
     texMask = makeTex(sb, false);
     // Wellen-Gitter auf der Wasserfläche: Ausdehnung aus dem Becken-Umriss, 512 Zellen in der Breite
@@ -350,13 +352,37 @@
     g.putImageData(d, 0, 0);
     // G leicht, B stark weichzeichnen (Lichthof)
     const halo = document.createElement('canvas'); halo.width = w; halo.height = h;
-    const hc = halo.getContext('2d'); hc.filter = 'blur(26px)'; hc.drawImage(c, 0, 0); hc.drawImage(c, 0, 0); hc.drawImage(c, 0, 0); hc.filter = 'none';
+    const hc = halo.getContext('2d'); hc.drawImage(c, 0, 0); blurCanvas(halo, 26);
     const core = document.createElement('canvas'); core.width = w; core.height = h;
-    const cc = core.getContext('2d'); cc.filter = 'blur(2px)'; cc.drawImage(c, 0, 0); cc.filter = 'none';
+    const cc = core.getContext('2d'); cc.drawImage(c, 0, 0); blurCanvas(core, 2);
     const A = cc.getImageData(0, 0, w, h), B = hc.getImageData(0, 0, w, h);
     for (let i = 0; i < A.data.length; i += 4) { A.data[i + 2] = Math.min(255, B.data[i + 2] * 1.8); }
     cc.putImageData(A, 0, 0);
     return core;
+  }
+
+  /* Weichzeichnen ohne ctx.filter (WebKit/WKWebView kennt das nicht und zeichnet dann scharf):
+     drei Box-Durchgänge je Richtung ≈ Gauß mit Standardabweichung sigma (wie CSS blur(sigma px)). */
+  function blurCanvas(cv, sigma) {
+    const w = cv.width, h = cv.height, g = cv.getContext('2d'), img = g.getImageData(0, 0, w, h), p = img.data;
+    const r = Math.max(1, Math.round((Math.sqrt(4 * sigma * sigma + 1) - 1) / 2));   // 3 Boxen der Breite 2r+1
+    const n = w * h, ch = [new Float32Array(n), new Float32Array(n), new Float32Array(n)], tmp = new Float32Array(Math.max(w, h));
+    for (let c = 0; c < 3; c++) for (let i = 0; i < n; i++) ch[c][i] = p[i * 4 + c];
+    const pass = (a, len, stride, count, step) => {
+      for (let k = 0; k < count; k++) {
+        const o = k * step;
+        let acc = 0;
+        for (let i = -r; i <= r; i++) acc += a[o + Math.min(len - 1, Math.max(0, i)) * stride];
+        for (let i = 0; i < len; i++) {
+          tmp[i] = acc / (2 * r + 1);
+          acc += a[o + Math.min(len - 1, i + r + 1) * stride] - a[o + Math.max(0, i - r) * stride];
+        }
+        for (let i = 0; i < len; i++) a[o + i * stride] = tmp[i];
+      }
+    };
+    for (const a of ch) for (let it = 0; it < 3; it++) { pass(a, w, 1, h, w); pass(a, h, w, w, 1); }
+    for (let i = 0; i < n; i++) { p[i * 4] = ch[0][i]; p[i * 4 + 1] = ch[1][i]; p[i * 4 + 2] = ch[2][i]; p[i * 4 + 3] = 255; }
+    g.putImageData(img, 0, 0);
   }
 
   // welche Art als Nächstes ins Wasser kommt
@@ -461,15 +487,26 @@
     for (let i = tea.length - 1; i >= 0; i--) { tea[i].a += dt; if (tea[i].a > tea[i].life) tea.splice(i, 1); }
   }
 
-  function randomWater() {
-    for (let k = 0; k < 20; k++) { const u = 0.18 + Math.random() * 0.62, v = 0.24 + Math.random() * 0.6; if (inWater(u, v)) return [u, v]; }
+  function randomWater(r = 0) {
+    for (let k = 0; k < 40; k++) { const u = 0.18 + Math.random() * 0.62, v = 0.24 + Math.random() * 0.6; if (fits(u, v, r)) return [u, v]; }
     return null;
+  }
+  // passt ein Kreis (Radius r in Bildhöhe, perspektivisch skaliert) ganz ins Wasser? 8 Punkte am Umfang + Mitte
+  function fits(u, v, r) {
+    if (!inWater(u, v)) return false;
+    if (r <= 0) return true;
+    const rr = r * sAt(v);
+    for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; if (!inWater(u + Math.cos(a) * rr / IA, v + Math.sin(a) * rr)) return false; }
+    return true;
   }
 
   function stepYuzus(dt) {
     // Anzahl: fehlende tauchen auf (außer bei fallenden Blüten – die kommen von oben), zu viele verschwinden (älteste zuerst)
     const want = Math.min(MAX_FLOAT, cfg.floatcount);
-    if (cfg.weather !== 'blossoms') while (yuzus.length < want) { const q = randomWater(); if (!q) break; yuzus.push(newFloater(q[0], q[1], nextKind())); }
+    if (cfg.weather !== 'blossoms') while (yuzus.length < want) {
+      const kind = nextKind(), f = newFloater(0, 0, kind), q = randomWater(f.r * 1.15); if (!q) break;
+      f.u = q[0]; f.v = q[1]; yuzus.push(f);
+    }
     while (yuzus.length > want) yuzus.shift();
     const cx = 0.49, cy = 0.54;
     for (const y of yuzus) {
@@ -506,11 +543,14 @@
       const ps = sAt(y.v);                                  // hinten treibt alles langsamer übers Bild
       let nu = y.u + y.vu * dt * ps, nv = y.v + y.vv * dt * ps * CV;
       // am Beckenrand abprallen (Rand der Frucht muss im Wasser bleiben)
-      const rr = y.r * 0.9 * ps;
-      const ok = (u, v) => inWater(u + rr / IA, v) && inWater(u - rr / IA, v) && inWater(u, v + rr) && inWater(u, v - rr);
-      if (!ok(nu, y.v)) { y.vu *= -0.5; nu = y.u; }
-      if (!ok(y.u, nv)) { y.vv *= -0.5; nv = y.v; }
-      if (ok(nu, nv)) { y.u = nu; y.v = nv; }
+      const ok = (u, v) => fits(u, v, y.r);
+      if (!ok(y.u, y.v)) {                                // steckt schon im Stein (z. B. Fenster verkleinert) -> zur Mitte schieben
+        y.u += (cx - y.u) * 0.6 * dt; y.v += (cy - y.v) * 0.6 * dt; y.vu = y.vv = 0;
+      } else {
+        if (!ok(nu, y.v)) { y.vu *= -0.5; nu = y.u; }
+        if (!ok(y.u, nv)) { y.vv *= -0.5; nv = y.v; }
+        if (ok(nu, nv)) { y.u = nu; y.v = nv; }
+      }
       y.rot += (y.spin + Math.hypot(y.vu, y.vv) * 40) * dt;
       y.bob += dt;
       if (y.kind === KIND.yuzu && Math.random() < dt * 0.4) splash(y.u, y.v, 0.004, -0.025);   // kleine Wellen durchs Schaukeln
