@@ -161,6 +161,12 @@ func strokeStyle(_ l: CAShapeLayer, theme: Theme) {
         l.shadowRadius = 6
     case .peitsche:                                     // Peitsche zeichnet nicht, sie knallt nur
         l.strokeColor = nil
+    case .yuzu:                                         // Yuzu-Gelb mit warmem Laternenschein
+        l.strokeColor = YUZU_YELLOW.cgColor
+        l.lineWidth = 6
+        l.shadowColor = YUZU_LANTERN.cgColor
+        l.shadowOpacity = 0.9
+        l.shadowRadius = 6
     case .wueste:                                       // feine goldene Linie mit warmem Schimmer
         l.strokeColor = SAND_GOLD.cgColor
         l.lineWidth = 2.5
