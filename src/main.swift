@@ -196,6 +196,7 @@ final class Overlay: NSObject, NSApplicationDelegate {
     var currentStroke: CAShapeLayer?
     var currentPath: CGMutablePath?
     var drawItem: NSMenuItem?
+    var awakeItem: NSMenuItem?
     var drawing = false {
         didSet {
             window.ignoresMouseEvents = !drawing
@@ -1017,6 +1018,7 @@ final class Overlay: NSObject, NSApplicationDelegate {
     }
 
     @objc func toggleDrawing() { drawing.toggle() }
+    @objc func toggleStayAwake() { StayAwake.shared.toggle() }
 
     // ---------- Menüleiste ----------
     func buildMenu() {
@@ -1060,6 +1062,11 @@ final class Overlay: NSObject, NSApplicationDelegate {
         draw.target = self
         drawItem = draw
         menu.addItem(draw)
+        let awake = NSMenuItem(title: "Anwesend bleiben (Teams)  (⌃⌥A)", action: #selector(toggleStayAwake), keyEquivalent: "")
+        awake.target = self
+        awakeItem = awake
+        menu.addItem(awake)
+        StayAwake.shared.onChange = { [weak self] in self?.refreshMenu() }      // src/wachhalten.swift
         menu.addItem(.separator())
         if #available(macOS 13.0, *) {
             let li = NSMenuItem(title: "Bei Anmeldung starten", action: #selector(toggleLogin), keyEquivalent: "")
@@ -1087,8 +1094,9 @@ final class Overlay: NSObject, NSApplicationDelegate {
         for item in customItems { item.state = (item.representedObject as? String) == custom?.folder.path ? .on : .off }
         deleteThemeItem?.isHidden = custom == nil
         drawItem?.state = drawing ? .on : .off
-        // Menüleiste: immer das Kulisse-Symbol (Vorhang mit Mond), im Zeichenmodus mit Stift daneben
-        statusItem?.button?.title = drawing ? " ✏️" : ""
+        awakeItem?.state = StayAwake.shared.isOn ? .on : .off
+        // Menüleiste: immer das Kulisse-Symbol (Vorhang mit Mond), im Zeichenmodus mit Stift daneben, ☕ = Anwesend bleiben
+        statusItem?.button?.title = (drawing ? " ✏️" : "") + (StayAwake.shared.isOn ? " ☕" : "")
         statusItem?.button?.appearsDisabled = mode == .off && !drawing
         statusItem?.menu?.item(withTag: 99)?.title = "Bild: " + (sprite?.source ?? "keins gefunden")
         if #available(macOS 13.0, *) { loginItem?.state = SMAppService.mainApp.status == .enabled ? .on : .off }
@@ -1143,6 +1151,7 @@ final class Overlay: NSObject, NSApplicationDelegate {
                 case 2: overlay.quit()
                 case 3: overlay.toggleDrawing()
                 case 4: WallpaperManager.shared.uiLockWithSaver()
+                case 5: overlay.toggleStayAwake()
                 default: break
                 }
             }
@@ -1155,6 +1164,8 @@ final class Overlay: NSObject, NSApplicationDelegate {
         RegisterEventHotKey(UInt32(kVK_ANSI_Q), mods, EventHotKeyID(signature: 0x52434E50, id: 2),
                             GetApplicationEventTarget(), 0, &ref)
         RegisterEventHotKey(UInt32(kVK_ANSI_V), mods, EventHotKeyID(signature: 0x52434E50, id: 3),
+                            GetApplicationEventTarget(), 0, &ref)
+        RegisterEventHotKey(UInt32(kVK_ANSI_A), mods, EventHotKeyID(signature: 0x52434E50, id: 5),
                             GetApplicationEventTarget(), 0, &ref)
         // Sperren, während der Live-Hintergrund als Bildschirmschoner weiterläuft
         RegisterEventHotKey(UInt32(kVK_ANSI_L), UInt32(controlKey | optionKey | cmdKey), EventHotKeyID(signature: 0x52434E50, id: 4),

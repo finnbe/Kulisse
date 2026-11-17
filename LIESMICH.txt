@@ -146,6 +146,11 @@ Bedienen
                   - der Strich verschwindet 2,5 Sekunden nach dem Loslassen
                   - Klicks gehen nicht an die Präsentation, die Pfeiltasten aber schon
                   - Rechtsklick löscht alle Striche sofort
+  Ctrl+Option+A   Anwesend bleiben an/aus (☕ in der Menüleiste): Teams & Co. springen nicht auf "Abwesend".
+                  Meldet macOS alle 30 s "Benutzer aktiv" (hält auch den Bildschirm wach). Ist die App unter
+                  Systemeinstellungen -> Datenschutz -> Bedienungshilfen freigegeben, kommt bei Leerlauf zusätzlich
+                  eine Mausbewegung um 0 Pixel dazu (Zeiger bleibt stehen). Beim App-Start immer aus.
+                  Intervall: WACH_INTERVAL in src/wachhalten.swift.
   Ctrl+Option+Q   beenden (der normale Zeiger kommt sofort zurück)
   🦝-Menü         Design, Modus, Zeichenmodus, Export/Import, "Bei Anmeldung starten", Beenden
 
