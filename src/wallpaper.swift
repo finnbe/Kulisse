@@ -659,6 +659,21 @@ final class WallpaperManager: NSObject, WKNavigationDelegate, NSMenuDelegate {
     private(set) var saverRenamed = false
     var saverInstalled: Bool { FileManager.default.fileExists(atPath: saverInstalledURL.path) }
 
+    /// Fingerabdruck eines Hintergrund-Ordners: jüngste Änderung, Anzahl und Gesamtgröße aller Dateien.
+    /// (Nur project.json anzuschauen reicht nicht – sonst bleibt die Kopie alt, wenn sich z. B. nur ein Skript ändert.)
+    private func folderStamp(_ folder: URL) -> String {
+        let keys: [URLResourceKey] = [.contentModificationDateKey, .fileSizeKey, .isRegularFileKey]
+        var newest = 0.0, count = 0, size = 0
+        if let en = FileManager.default.enumerator(at: folder, includingPropertiesForKeys: keys) {
+            for case let u as URL in en {
+                guard let v = try? u.resourceValues(forKeys: Set(keys)), v.isRegularFile == true else { continue }
+                newest = max(newest, v.contentModificationDate?.timeIntervalSince1970 ?? 0)
+                count += 1; size += v.fileSize ?? 0
+            }
+        }
+        return "\(Int(newest))|\(count)|\(size)"
+    }
+
     /// Was der Bildschirmschoner zeigen soll (er liest das selbst, siehe saver.swift)
     func writeSaverConfig() {
         guard let p = current else { return }
@@ -670,7 +685,7 @@ final class WallpaperManager: NSObject, WKNavigationDelegate, NSMenuDelegate {
         if !p.folder.standardizedFileURL.path.hasPrefix(base.standardizedFileURL.path) {
             let dest = base.appendingPathComponent("Bildschirmschoner-Hintergrund", isDirectory: true)
             let mark = dest.appendingPathComponent(".quelle")
-            let stamp = p.folder.path + "|" + String(describing: (try? FileManager.default.attributesOfItem(atPath: p.folder.appendingPathComponent("project.json").path))?[.modificationDate] ?? "")
+            let stamp = p.folder.path + "|" + folderStamp(p.folder)
             if (try? String(contentsOf: mark, encoding: .utf8)) != stamp {
                 try? FileManager.default.removeItem(at: dest)
                 guard (try? FileManager.default.copyItem(at: p.folder, to: dest)) != nil else { return }
