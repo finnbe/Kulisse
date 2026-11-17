@@ -14,6 +14,16 @@ Unter [Releases](../../releases) liegt `Kulisse-macOS.zip` (Apple Silicon + Inte
 Die App ist nur ad hoc signiert, nicht von Apple notarisiert. Beim ersten Start: Rechtsklick auf `Kulisse.app` →
 **Öffnen**, oder Systemeinstellungen → Datenschutz & Sicherheit → „Dennoch öffnen“.
 
+## Hintergründe und Designs einzeln
+
+Auf [kulisse.finnegan-berz.com](https://kulisse.finnegan-berz.com) gibt es jeden Live-Hintergrund und jedes Zeiger-Design
+einzeln: `.wallpapertheme` bzw. `.pointertheme` (Doppelklick importiert in Kulisse) und die Hintergründe zusätzlich als
+Projektordner für Wallpaper Engine. Die Dateien baut `store/make-store.sh` bei jedem Push ins Release „Neuester Stand“.
+
+Neuer Hintergrund oder neues Design: Eintrag mit deutschem Text in `store/meta.json` (bei Designs zusätzlich eine Vorschau
+unter `store/previews/`), dann `store/make-store.sh` ausführen und `store/catalog.json` mit einchecken – die Pipeline
+prüft, dass der Katalog aktuell ist.
+
 ## Selbst bauen
 
 Braucht nur die Xcode Command Line Tools (`xcode-select --install`):

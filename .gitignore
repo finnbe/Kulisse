@@ -3,3 +3,4 @@ Kulisse.app/
 *.zip
 .DS_Store
 .idea/
+dist/
