@@ -1,0 +1,94 @@
+[
+  {
+    "name": "Standard",
+    "values": {}
+  },
+  {
+    "name": "Schnee mit Kirschblüten (Tag/Nacht-Wechsel)",
+    "values": {
+      "weather": "snow",
+      "floating": "sakura",
+      "floatcount": 30,
+      "timemode": "cycle"
+    }
+  },
+  {
+    "name": "Schneenacht",
+    "values": {
+      "timemode": "night",
+      "weather": "snow",
+      "amount": 70,
+      "steam": 75
+    }
+  },
+  {
+    "name": "Sonniger Wintertag",
+    "values": {
+      "timemode": "day",
+      "weather": "none",
+      "steam": 40,
+      "floatcount": 9
+    }
+  },
+  {
+    "name": "Kirschblüten",
+    "values": {
+      "floating": "sakura",
+      "floatcount": 30,
+      "weather": "blossoms",
+      "amount": 60,
+      "timemode": "day",
+      "steam": 45
+    }
+  },
+  {
+    "name": "Herbstlaub",
+    "values": {
+      "floating": "maple",
+      "floatcount": 18,
+      "weather": "none",
+      "timemode": "dusk"
+    }
+  },
+  {
+    "name": "Regen am Abend",
+    "values": {
+      "timemode": "dusk",
+      "weather": "rain",
+      "amount": 60,
+      "steam": 70
+    }
+  },
+  {
+    "name": "Ganz still",
+    "values": {
+      "weather": "none",
+      "ripples": false,
+      "flicker": 20,
+      "react": 0,
+      "floatcount": 4
+    }
+  },
+  {
+    "name": "Yuzu-Bad",
+    "values": {
+      "steam": 45,
+      "floatcount": 14
+    }
+  },
+  {
+    "name": "Mit Uhr",
+    "values": {
+      "clock": true
+    }
+  },
+  {
+    "name": "Stromsparend",
+    "values": {
+      "weather": "none",
+      "steam": 30,
+      "renderscale": "50",
+      "floatcount": 4
+    }
+  }
+]

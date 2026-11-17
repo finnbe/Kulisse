@@ -236,6 +236,14 @@ private let WP_HELPER_JS = """
 })();
 """
 
+/// Welcher Bildschirm (von links gezählt) und wie viele: für Hintergründe, die sich über mehrere Bildschirme
+/// erstrecken (z. B. Yuzu Onsen Panorama). Die Seite liest window.kulisseScreen = {index, count}.
+func wpScreenJS(_ screen: NSScreen, among screens: [NSScreen]) -> String {
+    let ordered = screens.sorted { ($0.frame.minX, -$0.frame.maxY) < ($1.frame.minX, -$1.frame.maxY) }
+    let i = ordered.firstIndex { $0 === screen } ?? 0
+    return "window.kulisseScreen={index:\(i),count:\(max(1, ordered.count))};"
+}
+
 /// Diagnose-Zeile nach ~/Library/Logs/Kulisse-Hintergrund.log
 func wpDebugLog(_ line: String) {
     let url = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0]
@@ -437,6 +445,8 @@ final class WallpaperManager: NSObject, WKNavigationDelegate, NSMenuDelegate {
             cfg.suppressesIncrementalRendering = true
             if let r = ruleList { cfg.userContentController.add(r) }
             cfg.userContentController.addUserScript(WKUserScript(source: WP_HELPER_JS, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+            cfg.userContentController.addUserScript(WKUserScript(source: wpScreenJS(screen, among: screens),
+                                                                 injectionTime: .atDocumentStart, forMainFrameOnly: true))
             let dpr = pixelRatio(for: screen)
             if dpr != screen.backingScaleFactor {      // weniger Pixel rendern -> viel weniger GPU-Last
                 cfg.userContentController.addUserScript(WKUserScript(source:

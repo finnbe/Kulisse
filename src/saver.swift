@@ -94,6 +94,12 @@ final class KulisseSaverView: ScreenSaverView, WKNavigationDelegate {
         // Musik-Schnittstelle als leere Hülle, damit Seiten, die sich anmelden, nicht stolpern
         wc.userContentController.addUserScript(WKUserScript(source:
             "window.wallpaperRegisterAudioListener=function(){};", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        // welcher Bildschirm (von links gezählt) – für Hintergründe, die sich über mehrere Bildschirme erstrecken
+        let all = (cfg.mainScreenOnly || isPreview) ? [] : NSScreen.screens
+            .sorted { ($0.frame.minX, -$0.frame.maxY) < ($1.frame.minX, -$1.frame.maxY) }
+        let idx = window?.screen.flatMap { s in all.firstIndex { $0 === s } } ?? 0
+        wc.userContentController.addUserScript(WKUserScript(source:
+            "window.kulisseScreen={index:\(idx),count:\(max(1, all.count))};", injectionTime: .atDocumentStart, forMainFrameOnly: true))
         if let dpr = cfg.devicePixelRatio, !isPreview {
             wc.userContentController.addUserScript(WKUserScript(source:
                 "try{Object.defineProperty(window,'devicePixelRatio',{get:function(){return \(dpr)},configurable:true});}catch(e){}",

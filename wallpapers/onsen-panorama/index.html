@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yuzu Onsen</title>
+<style>
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #1b2633; cursor: default; user-select: none; -webkit-user-select: none; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  #fx { pointer-events: none; }
+  #clock { position: fixed; right: 5vw; bottom: 8vh; font: 300 10vh/1 "Hiragino Mincho ProN", "Yu Mincho", "Georgia", serif; letter-spacing: .05em;
+           color: rgba(255,250,240,.92); text-shadow: 0 0 .3em rgba(0,10,30,.6), 0 0 1em rgba(0,10,30,.4); pointer-events: none; font-variant-numeric: tabular-nums; }
+  #clock[hidden], #nogl[hidden] { display: none; }
+  #nogl { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; color: #def; font: 18px sans-serif; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<canvas id="fx"></canvas>
+<div id="clock" hidden></div>
+<div id="nogl" hidden>This wallpaper needs WebGL 2.</div>
+<script src="scene.js"></script>
+<script src="scene-sides.js"></script>
+<script src="js/onsen.js"></script>
+</body>
+</html>

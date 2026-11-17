@@ -112,6 +112,9 @@ Live-Hintergrund 🌊 (im 🦝-Menü ganz oben)
   Mitgeliefert (Wallpaper-Engine-Format): "Nishiki" (Koi-Teich, WebGL) und "Yuzu Onsen" (heiße Quelle im Schnee:
          gemalte Szene + WebGL-Effekte - echte Wellen, Dampf zum Wegwischen, treibende Yuzus, Schnee/Regen, Laternen,
          Tageszeit nach Uhr, Musikreaktion; Herkunft des Bildes in wallpapers/onsen/HERKUNFT.txt).
+         Dazu "Yuzu Onsen Panorama": derselbe Onsen über bis zu 3 Bildschirme - links Bambusgarten mit Steinbecken,
+         Mitte Onsen, rechts Veranda des Ryokan; bei 2 Bildschirmen links Onsen, rechts Veranda. Die App sagt jeder
+         Seite, welcher Bildschirm (von links) sie ist: window.kulisseScreen = {index, count}.
   Sperrbildschirm: "Auch auf dem Sperrbildschirm (Standbild)". macOS lässt keine App auf den Sperrbildschirm
          zeichnen, zeigt dort aber das Schreibtischbild. Darum setzt die App alle 15 Minuten, nach jeder Änderung und
          beim Sperren ein Standbild vom Hintergrund als Schreibtischbild (je Bildschirm, Dateien in

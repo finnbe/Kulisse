@@ -1,0 +1,13 @@
+Das Szenenbild (in scene.js als Data-URI) wurde am 16.11.2026 lokal mit Z-Image-Turbo (Tongyi-MAI, Apache-2.0)
+über mflux erzeugt (1920x1088, Seed 21). Ein ins Bild gemalter Schatten links vom Tablett wurde per Kopierstempel
+entfernt (Kiesel aus der Nachbarschaft, Helligkeit an die Umgebung angeglichen). Wasser, Wellen, Dampf, Yuzus, Schnee/Regen, Laternenlicht, Teedampf und
+Uhr sind Code (js/onsen.js). Die Wasserfläche ist eine Graustufen-Maske in scene.js (waterMask): mit SAM
+(Segment Anything, über rembg) aus dem Bild gewonnen – Punkte ins Wasser und auf Steine/Tablett gesetzt –, Löcher
+gefüllt, Kerben an Spiegelungen geschlossen, Tablett ausgespart; danach mit GrabCut (OpenCV) an die Steinkanten
+angelegt (Uferstreifen gehört jetzt zum Wasser), Tasse und Tablett genau ausgespart, Kante leicht weichgezeichnet.
+
+Panorama (Kopie von Yuzu Onsen, erweitert auf bis zu 3 Bildschirme): Die Seitenbilder in scene-sides.js wurden am
+17.11.2026 ebenfalls lokal mit Z-Image-Turbo (Apache-2.0) über mflux erzeugt (1920x1088, Seed 3; links Bambusgarten mit
+Steinbecken, rechts Veranda des Ryokan) und in den Farben (Lab-Mittelwert/Streuung) an das Onsen-Bild angeglichen. Die
+Wassermaske des Steinbeckens stammt von SAM (Segment Anything, über rembg). Welcher Bildschirm welches Bild zeigt, sagt
+die App der Seite über window.kulisseScreen (Position von links, Anzahl).
