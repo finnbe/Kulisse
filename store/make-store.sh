@@ -74,6 +74,17 @@ for p in meta["pointers"]:
     if "credit" in p: item["credit"] = p["credit"]
     pointers.append(item)
 
+# ---------- In die App eingebaute Zeiger (nur Vorschau, keine Datei) ----------
+builtin = []
+for b in meta.get("builtin", []):
+    animated = f"store/previews/builtin-{b['id']}.webp"
+    still = f"store/previews/builtin-{b['id']}-still.png"
+    if not os.path.isfile(still): fail(f"{still} fehlt – store/render/render-pointers.sh ausführen")
+    item = {"id": b["id"], "title": b["title"], "description": b["description"],
+            "preview": animated if os.path.isfile(animated) else still, "still": still}
+    if "credit" in b: item["credit"] = b["credit"]
+    builtin.append(item)
+
 catalog = {
     "format": 1,
     "repo": "finnbe/Kulisse",
@@ -81,6 +92,7 @@ catalog = {
     "app": {"file": "Kulisse-macOS.zip"},
     "wallpapers": wallpapers,
     "pointers": pointers,
+    "builtin": builtin,
 }
 text = json.dumps(catalog, ensure_ascii=False, indent=2) + "\n"
 if check:
@@ -89,5 +101,5 @@ if check:
 else:
     open("store/catalog.json", "w").write(text)
 shutil.copy("store/catalog.json", f"{out}/catalog.json")
-print(f"make-store: {len(wallpapers)} Hintergründe, {len(pointers)} Designs -> {out}")
+print(f"make-store: {len(wallpapers)} Hintergründe, {len(pointers)} Designs, {len(builtin)} eingebaute Zeiger -> {out}")
 PY

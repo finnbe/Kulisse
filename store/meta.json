@@ -1,5 +1,5 @@
 {
-  "_doc": "Texte für den Store (kulisse.finnegan-berz.com). Jeder Hintergrund in wallpapers/ und jedes Design in themes/ braucht hier einen Eintrag – sonst bricht store/make-store.sh ab. Reihenfolge = Reihenfolge im Store.",
+  "_doc": "Texte für den Store (kulisse.finnegan-berz.com). Jeder Hintergrund in wallpapers/ und jedes Design in themes/ braucht hier einen Eintrag – sonst bricht store/make-store.sh ab. Reihenfolge = Reihenfolge im Store. \"builtin\" = in die App eingebaute Zeiger (keine Datei, nur Vorschau): Vorschauen erzeugt store/render/render-pointers.sh.",
   "wallpapers": [
     {
       "id": "onsen-panorama",
@@ -16,7 +16,10 @@
       "id": "nishiki",
       "title": "Nishiki",
       "description": "Ein Koi-Teich von oben: Licht auf den Kieseln, treibende Seerosen und Kirschblüten. Ein Klick füttert die Koi, die Maus zieht Wellen. Der Teich folgt der Uhrzeit bis zur Mondnacht mit Glühwürmchen.",
-      "credit": { "name": "ReeZ", "url": "https://wallpapers.reez.cc/" }
+      "credit": {
+        "name": "ReeZ",
+        "url": "https://wallpapers.reez.cc/"
+      }
     }
   ],
   "pointers": [
@@ -25,21 +28,97 @@
       "id": "skelett-totenkopf",
       "title": "Skelett Totenkopf",
       "description": "Gezeichneter Schädel mit glühenden Augen am Skelett-Zeiger. Das Skelett hängt mit Physik an der Maus, rennt mit und zappelt beim Fallen.",
-      "credit": { "name": "Skelett nach dem Windows-Lava-Pointer" }
+      "credit": {
+        "name": "Skelett nach dem Windows-Lava-Pointer"
+      }
     },
     {
       "file": "Lava Hand.pointertheme",
       "id": "lava-hand",
       "title": "Lava Hand",
       "description": "Glühende Hand auf dem Teleskop-Zeigestock, im Zeichenmodus ein oranger Leuchtstrich.",
-      "credit": { "name": "Hand aus dem Windows-Lava-Pointer" }
+      "credit": {
+        "name": "Hand aus dem Windows-Lava-Pointer"
+      }
     },
     {
       "file": "Schnee Hand.pointertheme",
       "id": "schnee-hand",
       "title": "Schnee Hand",
       "description": "Vereiste Hand auf dem Teleskop-Zeigestock, im Zeichenmodus ein eisblauer Leuchtstrich.",
-      "credit": { "name": "Hand aus dem Windows-Lava-Pointer" }
+      "credit": {
+        "name": "Hand aus dem Windows-Lava-Pointer"
+      }
+    }
+  ],
+  "builtin": [
+    {
+      "id": "ente",
+      "title": "Ente mit Küken",
+      "description": "Eine Ente watschelt voraus, drei Küken laufen im Gänsemarsch hinterher und schlafen ein, wenn die Maus stillsteht. Zwischendurch liegt ein Ei herum – drüberfahren, und ein Küken schlüpft."
+    },
+    {
+      "id": "ufo",
+      "title": "UFO-Kuh-Entführung",
+      "description": "Ein wackelndes UFO mit Traktorstrahl. Fliegt es tief über eine Kuh, wird sie hochgebeamt; bei fünf Kühen wirft es alle an Fallschirmen wieder ab."
+    },
+    {
+      "id": "zug",
+      "title": "Zug",
+      "description": "Eine kleine Dampflok ist der Zeiger. Im Zeichenmodus werden aus dem Strich Schienen, und eine Sekunde später fährt ein Zug die Strecke nach."
+    },
+    {
+      "id": "peitsche",
+      "title": "Peitsche",
+      "description": "Eine Lederpeitsche schwingt mit Seil-Physik am Zeiger. Im Zeichenmodus knallt sie bei jedem Klick oder schnellen Schwung – mit Ton."
+    },
+    {
+      "id": "skelett",
+      "title": "Skelett",
+      "description": "Ein Kopf an einer Nadel, darunter hängt ein leuchtendes Skelett: Es rennt mit, reißt beim Hochfahren die Arme hoch und zappelt beim Fallen.",
+      "credit": {
+        "name": "nach dem Windows-Lava-Pointer"
+      }
+    },
+    {
+      "id": "halloween",
+      "title": "Halloween: Taschenlampe",
+      "description": "Der Bildschirm wird dunkel, um die Maus flackert ein Lichtkegel. Der Zeiger ist ein Kürbis, ein Geist schwebt hinterher, bei jedem Klick fliegen Fledermäuse los."
+    },
+    {
+      "id": "spinne",
+      "title": "Halloween: Spinne",
+      "description": "Eine Spinne am Faden ist der Zeiger und schwingt beim Bewegen nach. Jeder Klick spinnt ein kleines Netz – so sieht man, wo geklickt wurde."
+    },
+    {
+      "id": "wueste",
+      "title": "Wüstenplanet",
+      "description": "Ein dezentes Visier, beim Bewegen rieselt feiner Sand, im Stillstand glimmt die Raute blau. Klicks schicken Ringe durch den Sand."
+    },
+    {
+      "id": "fuesse",
+      "title": "Grüne Füße",
+      "description": "Ein grüner Fußabdruck zieht eine Spur, die langsam verblasst. Beim Klick stampft der Fuß auf."
+    },
+    {
+      "id": "addmore",
+      "title": "addmore (Laserpointer)",
+      "description": "Ein leuchtender oranger Punkt mit Plus und kurzem Schweif; jeder Klick schickt Ringe nach außen."
+    },
+    {
+      "id": "zeigestock",
+      "title": "Zeigestock",
+      "description": "Eine weiße Hand auf einem Teleskop-Zeigestock – das Standard-Design. Im Zeichenmodus ein neonoranger Strich."
+    },
+    {
+      "id": "waschbaer",
+      "title": "Waschbär",
+      "description": "Eine fellige Waschbärhand zeigt auf die Folie, im Zeichenmodus bleibt eine Pfotenspur."
+    },
+    {
+      "id": "halter",
+      "title": "Waschbär hält Stab",
+      "description": "Der Zeigestock, unten hält eine Waschbärpfote den Griff."
     }
   ]
 }
