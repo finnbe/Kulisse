@@ -109,9 +109,9 @@ Live-Hintergrund 🌊 (im 🦝-Menü ganz oben)
          und gibt das Spektrum wie Wallpaper Engine an den Hintergrund. Beim ersten Mal fragt macOS nach der Freigabe
          "Audioaufnahme" (Datenschutz & Sicherheit). Nichts wird gespeichert. Läuft nur, solange ein Hintergrund
          sichtbar ist. Nach jedem Neubauen (build.sh) kann macOS erneut fragen (neue Signatur).
-  Mitgeliefert: "Nishiki" (Koi-Teich, WebGL) und "Neon Nook" (gemütlicher Fensterplatz über einer verregneten
-         Cyberpunk-Stadt, Canvas 2D: Maus wischt die beschlagene Scheibe frei, Klick aufs Glas = Tropfen, Klick auf die
-         Katze weckt sie, Werbetafel/Radio/Lichterkette tanzen zur Musik). Beide im Wallpaper-Engine-Format.
+  Mitgeliefert (Wallpaper-Engine-Format): "Nishiki" (Koi-Teich, WebGL) und "Yuzu Onsen" (heiße Quelle im Schnee:
+         gemalte Szene + WebGL-Effekte - echte Wellen, Dampf zum Wegwischen, treibende Yuzus, Schnee/Regen, Laternen,
+         Tageszeit nach Uhr, Musikreaktion; Herkunft des Bildes in wallpapers/onsen/HERKUNFT.txt).
   Sperrbildschirm: "Auch auf dem Sperrbildschirm (Standbild)". macOS lässt keine App auf den Sperrbildschirm
          zeichnen, zeigt dort aber das Schreibtischbild. Darum setzt die App alle 15 Minuten, nach jeder Änderung und
          beim Sperren ein Standbild vom Hintergrund als Schreibtischbild (je Bildschirm, Dateien in

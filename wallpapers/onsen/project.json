@@ -1,0 +1,267 @@
+{
+  "contentrating": "Everyone",
+  "description": "A quiet Japanese hot spring in the snow, seen from above. Steam drifts over the water - wipe it away with your mouse and watch it slowly return. Yuzu fruits, cherry blossom petals or maple leaves float and bob on real ripples, snowflakes melt into the pool, stone lanterns flicker, the tea is still warm. Click the water to make waves, move the mouse to draw ripples. Follows your clock from day to dusk to night and ripples to the beat of your music. Snow, rain or clear skies in the settings.",
+  "file": "index.html",
+  "preview": "preview.jpg",
+  "tags": [
+    "Relaxing",
+    "Nature",
+    "Anime"
+  ],
+  "title": "Yuzu Onsen: Interactive Hot Spring",
+  "type": "web",
+  "visibility": "private",
+  "general": {
+    "supportsaudioprocessing": true,
+    "properties": {
+      "schemecolor": {
+        "order": 0,
+        "text": "ui_browse_properties_scheme_color",
+        "type": "color",
+        "value": "0.98 0.75 0.2"
+      },
+      "timemode": {
+        "order": 1,
+        "text": "ui_on_timemode",
+        "type": "combo",
+        "value": "auto",
+        "options": [
+          {
+            "label": "ui_on_tm_auto",
+            "value": "auto"
+          },
+          {
+            "label": "ui_on_tm_cycle",
+            "value": "cycle"
+          },
+          {
+            "label": "ui_on_tm_day",
+            "value": "day"
+          },
+          {
+            "label": "ui_on_tm_dusk",
+            "value": "dusk"
+          },
+          {
+            "label": "ui_on_tm_night",
+            "value": "night"
+          }
+        ]
+      },
+      "weather": {
+        "order": 2,
+        "text": "ui_on_weather",
+        "type": "combo",
+        "value": "snow",
+        "options": [
+          {
+            "label": "ui_on_w_snow",
+            "value": "snow"
+          },
+          {
+            "label": "ui_on_w_rain",
+            "value": "rain"
+          },
+          {
+            "label": "ui_on_w_blossoms",
+            "value": "blossoms"
+          },
+          {
+            "label": "ui_on_w_none",
+            "value": "none"
+          }
+        ]
+      },
+      "amount": {
+        "order": 3,
+        "text": "ui_on_amount",
+        "type": "slider",
+        "value": 50,
+        "min": 0,
+        "max": 100,
+        "fraction": false,
+        "condition": "weather.value != 'none'"
+      },
+      "steam": {
+        "order": 4,
+        "text": "ui_on_steam",
+        "type": "slider",
+        "value": 60,
+        "min": 0,
+        "max": 100,
+        "fraction": false
+      },
+      "ripples": {
+        "order": 7,
+        "text": "ui_on_ripples",
+        "type": "bool",
+        "value": true
+      },
+      "flicker": {
+        "order": 8,
+        "text": "ui_on_flicker",
+        "type": "slider",
+        "value": 60,
+        "min": 0,
+        "max": 100,
+        "fraction": false
+      },
+      "teasteam": {
+        "order": 9,
+        "text": "ui_on_teasteam",
+        "type": "bool",
+        "value": true
+      },
+      "react": {
+        "order": 10,
+        "text": "ui_on_react",
+        "type": "slider",
+        "value": 60,
+        "min": 0,
+        "max": 100,
+        "fraction": false
+      },
+      "parallax": {
+        "order": 11,
+        "text": "ui_on_parallax",
+        "type": "slider",
+        "value": 50,
+        "min": 0,
+        "max": 100,
+        "fraction": false
+      },
+      "clock": {
+        "order": 12,
+        "text": "ui_on_clock",
+        "type": "bool",
+        "value": false
+      },
+      "hour24": {
+        "order": 13,
+        "text": "ui_on_hour24",
+        "type": "bool",
+        "value": true,
+        "condition": "clock.value == true"
+      },
+      "renderscale": {
+        "order": 14,
+        "text": "ui_on_renderscale",
+        "type": "combo",
+        "value": "100",
+        "options": [
+          {
+            "label": "ui_on_rs_100",
+            "value": "100"
+          },
+          {
+            "label": "ui_on_rs_75",
+            "value": "75"
+          },
+          {
+            "label": "ui_on_rs_50",
+            "value": "50"
+          }
+        ]
+      },
+      "floating": {
+        "order": 5,
+        "text": "ui_on_floating",
+        "type": "combo",
+        "value": "yuzu",
+        "options": [
+          {
+            "label": "ui_on_f_yuzu",
+            "value": "yuzu"
+          },
+          {
+            "label": "ui_on_f_sakura",
+            "value": "sakura"
+          },
+          {
+            "label": "ui_on_f_maple",
+            "value": "maple"
+          },
+          {
+            "label": "ui_on_f_mix",
+            "value": "mix"
+          }
+        ]
+      },
+      "floatcount": {
+        "order": 6,
+        "text": "ui_on_floatcount",
+        "type": "slider",
+        "value": 7,
+        "min": 0,
+        "max": 40,
+        "fraction": false
+      }
+    },
+    "localization": {
+      "en-us": {
+        "ui_on_timemode": "Time of day",
+        "ui_on_tm_auto": "Follow my clock",
+        "ui_on_tm_day": "Always day",
+        "ui_on_tm_dusk": "Always dusk",
+        "ui_on_tm_night": "Always night",
+        "ui_on_weather": "Weather",
+        "ui_on_w_snow": "Snow",
+        "ui_on_w_rain": "Rain",
+        "ui_on_w_none": "Clear",
+        "ui_on_amount": "Snow / rain / blossom amount",
+        "ui_on_steam": "Steam (wipe it away with the mouse)",
+        "ui_on_ripples": "Mouse draws ripples",
+        "ui_on_flicker": "Lantern flicker",
+        "ui_on_teasteam": "Steaming tea",
+        "ui_on_react": "Music reaction",
+        "ui_on_parallax": "Parallax (mouse)",
+        "ui_on_clock": "Show clock",
+        "ui_on_hour24": "24-hour clock",
+        "ui_on_renderscale": "Render resolution (lower = faster)",
+        "ui_on_rs_100": "100 % (best)",
+        "ui_on_rs_75": "75 %",
+        "ui_on_rs_50": "50 % (laptops)",
+        "ui_on_floating": "Floating in the water",
+        "ui_on_f_yuzu": "Yuzu fruits",
+        "ui_on_f_sakura": "Cherry blossom petals",
+        "ui_on_f_maple": "Maple leaves",
+        "ui_on_f_mix": "Yuzu and petals",
+        "ui_on_floatcount": "How many",
+        "ui_on_w_blossoms": "Falling blossoms",
+        "ui_on_tm_cycle": "Day/night cycle (10 min each)"
+      },
+      "de-de": {
+        "ui_on_timemode": "Tageszeit",
+        "ui_on_tm_auto": "Wie meine Uhr",
+        "ui_on_tm_day": "Immer Tag",
+        "ui_on_tm_dusk": "Immer Abend",
+        "ui_on_tm_night": "Immer Nacht",
+        "ui_on_weather": "Wetter",
+        "ui_on_w_snow": "Schnee",
+        "ui_on_w_rain": "Regen",
+        "ui_on_w_none": "Klar",
+        "ui_on_amount": "Menge Schnee / Regen / Blüten",
+        "ui_on_steam": "Dampf (mit der Maus wegwischen)",
+        "ui_on_ripples": "Maus zieht Wellen",
+        "ui_on_flicker": "Laternen flackern",
+        "ui_on_teasteam": "Dampfender Tee",
+        "ui_on_react": "Reaktion auf Musik",
+        "ui_on_parallax": "Tiefeneffekt (Maus)",
+        "ui_on_clock": "Uhr anzeigen",
+        "ui_on_hour24": "24-Stunden-Uhr",
+        "ui_on_renderscale": "Renderauflösung (weniger = schneller)",
+        "ui_on_rs_100": "100 % (beste Qualität)",
+        "ui_on_rs_75": "75 %",
+        "ui_on_rs_50": "50 % (Laptops)",
+        "ui_on_floating": "Im Wasser treibt",
+        "ui_on_f_yuzu": "Yuzus",
+        "ui_on_f_sakura": "Kirschblütenblätter",
+        "ui_on_f_maple": "Ahornblätter",
+        "ui_on_f_mix": "Yuzus und Blüten",
+        "ui_on_floatcount": "Anzahl",
+        "ui_on_w_blossoms": "Blüten fallen",
+        "ui_on_tm_cycle": "Tag/Nacht-Wechsel (je 10 Min.)"
+      }
+    }
+  }
+}

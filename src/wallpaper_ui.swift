@@ -97,43 +97,8 @@ extension WallpaperManager {
             for x in pre { add(pm, (x.file != nil ? "⭐ " : "") + x.name, #selector(menuPickPreset(_:)), obj: WPPresetRef(x)) }
             pi.submenu = pm
         }
-        let vals = values(for: p)
-        let props = p.properties.filter { $0.type != "textinput" && wpConditionMet($0.condition, vals) }
-        if !props.isEmpty { m.addItem(.separator()); add(m, "Effekte & Farben", nil, enabled: false) }
-        for prop in props {
-            let cur = vals[prop.key] ?? prop.defaultValue
-            switch prop.type {
-            case "bool":
-                add(m, prop.label, #selector(menuSetProp(_:)), on: wpBool(cur), obj: WPPropRef(p.id, prop.key, !wpBool(cur)))
-            case "combo":
-                let curLabel = prop.options.first { "\($0.value)" == "\(cur)" }?.label ?? "\(cur)"
-                let ci = add(m, "\(prop.label): \(curLabel)", nil); ci.isEnabled = true
-                let cm = NSMenu(); cm.autoenablesItems = false
-                for o in prop.options {
-                    add(cm, o.label, #selector(menuSetProp(_:)), on: "\(o.value)" == "\(cur)", obj: WPPropRef(p.id, prop.key, o.value))
-                }
-                ci.submenu = cm
-            case "slider":
-                let x = (cur as? NSNumber)?.doubleValue ?? Double("\(cur)") ?? prop.min
-                let si = add(m, "\(prop.label): \(wpFmt(x, prop))", nil); si.isEnabled = true
-                let sm = NSMenu(); sm.autoenablesItems = false
-                var steps = (0...4).map { prop.min + (prop.max - prop.min) * Double($0) / 4 }
-                if let d = (prop.defaultValue as? NSNumber)?.doubleValue, !steps.contains(where: { abs($0 - d) < 1e-9 }) { steps.append(d); steps.sort() }
-                let near = steps.min { abs($0 - x) < abs($1 - x) }
-                for v in steps {
-                    let r = prop.fraction ? v : v.rounded()
-                    let isDef = (prop.defaultValue as? NSNumber).map { abs($0.doubleValue - v) < 1e-9 } ?? false
-                    let t = (v == prop.min && prop.min == 0 ? "Aus (0)" : wpFmt(r, prop)) + (isDef ? "  (Standard)" : "")
-                    add(sm, t, #selector(menuSetProp(_:)), on: v == near, obj: WPPropRef(p.id, prop.key, prop.fraction ? r as Any : Int(r) as Any))
-                }
-                si.submenu = sm
-            case "color":
-                add(m, prop.label + " …", #selector(menuPickColor(_:)), obj: WPPropRef(p.id, prop.key, cur))
-            default: break
-            }
-        }
         m.addItem(.separator())
-        add(m, "Alle Einstellungen …", #selector(menuPackageSettings(_:)), obj: p.id)
+        add(m, "Einstellungen …  (live ausprobieren)", #selector(menuPackageSettings(_:)), obj: p.id)
         add(m, "Auf Standard zurücksetzen", #selector(menuResetPackage(_:)), obj: p.id)
         return m
     }
@@ -164,8 +129,7 @@ extension WallpaperManager {
         setValue(r.key, String(format: "%.3f %.3f %.3f", c.redComponent, c.greenComponent, c.blueComponent), for: p)
     }
     @objc func menuPackageSettings(_ s: NSMenuItem) {
-        if let id = s.representedObject as? String, let p = pkg(id), p !== current { select(p) }
-        WallpaperSettings.shared.show()
+        if let id = s.representedObject as? String, let p = pkg(id) { WallpaperSettings.shared.show(for: p) } else { WallpaperSettings.shared.show() }
     }
     @objc func menuResetPackage(_ s: NSMenuItem) {
         if let id = s.representedObject as? String, let p = pkg(id) { resetValues(for: p) }
@@ -341,12 +305,58 @@ final class WallpaperSettings: NSObject, NSWindowDelegate {
     private var propRows: [(prop: WPProperty, row: NSGridRow)] = []
     private var rebuildQueued = false
 
+    /// Stand beim Öffnen bzw. beim letzten „Anwenden“ – „Abbrechen“ kehrt dorthin zurück
+    private struct Snap {
+        let wallpaper: String?, values: [String: Any]
+        let enabled, allScreens, audio, battery, paused, lock: Bool
+        let fps: Int, quality: String
+    }
+    private var snap: Snap?
+    private var scrollView: NSScrollView?
+
+    private func takeSnap() {
+        snap = Snap(wallpaper: m.current?.id, values: UserDefaults.standard.dictionary(forKey: "wallpaperValues") ?? [:],
+                    enabled: m.enabled, allScreens: m.allScreens, audio: m.audioEnabled, battery: m.pauseOnBattery,
+                    paused: m.userPaused, lock: m.lockScreen, fps: m.fps, quality: m.quality)
+    }
+    private func restoreSnap() {
+        guard let s = snap else { return }
+        UserDefaults.standard.set(s.values, forKey: "wallpaperValues")
+        if let id = s.wallpaper, let p = m.packages.first(where: { $0.id == id }), p !== m.current { m.select(p) }
+        if let c = m.current { m.replaceValues(s.values[c.id] as? [String: Any] ?? [:]) }
+        if m.allScreens != s.allScreens { m.allScreens = s.allScreens }
+        if m.audioEnabled != s.audio { m.audioEnabled = s.audio }
+        if m.pauseOnBattery != s.battery { m.pauseOnBattery = s.battery }
+        if m.userPaused != s.paused { m.userPaused = s.paused }
+        if m.lockScreen != s.lock { m.lockScreen = s.lock }
+        if m.fps != s.fps { m.fps = s.fps }
+        if m.quality != s.quality { m.quality = s.quality }
+        if m.enabled != s.enabled { m.enabled = s.enabled }
+    }
+
     func show() {
         if window == nil { build() }
+        if window?.isVisible != true { takeSnap() }      // neu geöffnet: Ausgangsstand merken
         rebuild()
         NSApp.activate(ignoringOtherApps: true)
         window?.makeKeyAndOrderFront(nil)
     }
+
+    /// Einstellungen eines bestimmten Hintergrunds: er wird dafür sofort angezeigt (live ausprobieren)
+    func show(for p: WallpaperPackage) {
+        let fresh = window?.isVisible != true
+        if window == nil { build() }
+        if fresh { takeSnap() }
+        if p !== m.current { m.select(p) }
+        if !m.enabled { m.enabled = true }
+        rebuild()
+        NSApp.activate(ignoringOtherApps: true)
+        window?.makeKeyAndOrderFront(nil)
+    }
+
+    @objc private func cancelPressed() { restoreSnap(); snap = nil; window?.orderOut(nil); NSColorPanel.shared.orderOut(nil) }
+    @objc private func applyPressed() { takeSnap() }
+    @objc private func okPressed() { takeSnap(); window?.orderOut(nil); NSColorPanel.shared.orderOut(nil) }
 
     private func build() {
         let w = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 680, height: 760),
@@ -378,7 +388,36 @@ final class WallpaperSettings: NSObject, NSWindowDelegate {
             content.trailingAnchor.constraint(equalTo: doc.trailingAnchor),
             content.bottomAnchor.constraint(equalTo: doc.bottomAnchor),
         ])
-        w.contentView = scroll
+        // unten fest: Abbrechen / Anwenden / OK (Änderungen wirken sofort, „Abbrechen“ nimmt sie zurück)
+        let bar = NSStackView()
+        bar.orientation = .horizontal
+        bar.spacing = 10
+        bar.edgeInsets = NSEdgeInsets(top: 10, left: 20, bottom: 14, right: 20)
+        let hint = NSTextField(labelWithString: "Änderungen sind sofort zu sehen.")
+        hint.textColor = .secondaryLabelColor
+        hint.font = .systemFont(ofSize: 11)
+        let cancel = NSButton(title: "Abbrechen", target: self, action: #selector(cancelPressed))
+        cancel.keyEquivalent = "\u{1b}"
+        let apply = NSButton(title: "Anwenden", target: self, action: #selector(applyPressed))
+        let ok = NSButton(title: "OK", target: self, action: #selector(okPressed))
+        ok.keyEquivalent = "\r"
+        for b in [cancel, apply, ok] { b.bezelStyle = .rounded; b.widthAnchor.constraint(greaterThanOrEqualToConstant: 90).isActive = true }
+        bar.addArrangedSubview(hint)
+        bar.addView(cancel, in: .trailing); bar.addView(apply, in: .trailing); bar.addView(ok, in: .trailing)
+        let sep = NSBox(); sep.boxType = .separator
+        let root = NSView()
+        for v in [scroll, sep, bar] as [NSView] { v.translatesAutoresizingMaskIntoConstraints = false; root.addSubview(v) }
+        NSLayoutConstraint.activate([
+            scroll.topAnchor.constraint(equalTo: root.topAnchor),
+            scroll.leadingAnchor.constraint(equalTo: root.leadingAnchor), scroll.trailingAnchor.constraint(equalTo: root.trailingAnchor),
+            sep.topAnchor.constraint(equalTo: scroll.bottomAnchor),
+            sep.leadingAnchor.constraint(equalTo: root.leadingAnchor), sep.trailingAnchor.constraint(equalTo: root.trailingAnchor),
+            bar.topAnchor.constraint(equalTo: sep.bottomAnchor),
+            bar.leadingAnchor.constraint(equalTo: root.leadingAnchor), bar.trailingAnchor.constraint(equalTo: root.trailingAnchor),
+            bar.bottomAnchor.constraint(equalTo: root.bottomAnchor),
+        ])
+        w.contentView = root
+        scrollView = scroll
         w.center()
         window = w
         m.onChange = { [weak self] in self?.queueRebuild() }
@@ -392,7 +431,8 @@ final class WallpaperSettings: NSObject, NSWindowDelegate {
         w.setFrameOrigin(NSPoint(x: -5000, y: 0))
         w.orderFrontRegardless()
         v.layoutSubtreeIfNeeded()
-        let doc = (v as? NSScrollView)?.documentView ?? v
+        // "...-fenster.png" = sichtbares Fenster mit Knopfleiste, sonst der ganze (gescrollte) Inhalt
+        let doc = path.hasSuffix("-fenster.png") ? v : (scrollView?.documentView ?? v)
         doc.layoutSubtreeIfNeeded()
         let size = NSSize(width: v.bounds.width, height: max(v.bounds.height, doc.fittingSize.height))
         doc.setFrameSize(size)
@@ -403,6 +443,7 @@ final class WallpaperSettings: NSObject, NSWindowDelegate {
 
     func windowWillClose(_ notification: Notification) {
         NSColorPanel.shared.orderOut(nil)
+        snap = nil      // Schließen mit dem roten Knopf behält die Änderungen (wie OK)
     }
 
     /// nach dem aktuellen Ereignis neu aufbauen (nicht mitten in der Aktion eines Knopfs)
