@@ -47,8 +47,8 @@
   let maskData = null, MW = 0, MH = 0;               // Maske auf der CPU (Glühwürmchen, Wasserfall-Gischt)
   const mouse = { x: 0.5, y: 0.5, sx: 0.5, sy: 0.5, px: -1, py: -1, vx: 0, vy: 0, inside: false };
   const audio = { bass: 0, high: 0, active: 0 };
-  let time = 0, last = 0, acc = 0, paused = false, gust = 0;
-  let motes = [], flies = [], spray = [], shooting = [], scared = new Map();
+  let time = 0, last = 0, acc = 0, paused = false, gust = 0, windT = 0, grassT = 0;
+  let motes = [], flies = [], spray = [], shooting = [], scared = new Map(), gusts = [], streaks = [];
 
   /* ================= Shader ================= */
   const VS = `#version 300 es
@@ -60,7 +60,7 @@
   in vec2 vUv; out vec4 o;
   uniform sampler2D uScene, uPlate, uMask, uStill;
   uniform vec2 uRes, uImg, uPanF, uPanB, uIsland, uSun;
-  uniform float uT, uZoom, uTod, uMist, uRays, uBass, uWind, uGX, uStars, uMoon, uGrass;
+  uniform float uT, uZoom, uTod, uMist, uRays, uBass, uWind, uGX, uStars, uMoon, uGrass, uWindT, uGrassT;  // *T: aufintegrierte Windwege (Böen ohne Sprung)
   uniform vec4 uBobRect[${MAX_BOB}];    // Rechteck im Bild (u0, v0, u1, v1)
   uniform vec2 uBobOff[${MAX_BOB}];     // aktuelle Verschiebung
   uniform vec3 uFall;                   // Fuß des Wasserfalls (u, v) und Breite
@@ -81,13 +81,14 @@
     // --- Himmel (Platte): weiter weg -> wenig Parallaxe, die gemalten Wolken quellen langsam
     vec2 buv = iuv + uPanB;
     float still = texture(uStill, buv).r;                                  // Boden, Mühle: wabern nicht
-    vec2 wob = vec2(fbm(buv * 3.0 + vec2(t * 0.015, 0.0)), fbm(buv * 3.0 + vec2(5.2, t * 0.012))) - 0.5;
+    // Das Wabern läuft mit dem Wind nach rechts (wie Blüten und Nebel) statt dagegen
+    vec2 wob = vec2(fbm(buv * 3.0 + vec2(-uWindT * 0.6, 0.0)), fbm(buv * 3.0 + vec2(5.2 - uWindT * 0.6, t * 0.012))) - 0.5;
     buv += wob * 0.006 * (1.0 - still);
     // Gras im Wind (Maske G außerhalb der Insel): Halme wiegen sich, Böen laufen als Wellen durch
     float gm = texture(uMask, buv).g * (1.0 - texture(uMask, buv).r) * uGrass;
     if (gm > 0.01) {
-      float gust = noise(vec2(buv.x * 4.0 - t * (0.4 + uWind), buv.y * 2.0));
-      buv.x += (sin(t * 1.9 + buv.y * 55.0 + buv.x * 14.0) * 0.4 + gust - 0.4) * 0.004 * gm * (0.35 + uWind);
+      float gust = noise(vec2(buv.x * 4.0 - uGrassT, buv.y * 2.0));
+      buv.x += (sin(t * 1.9 + buv.y * 55.0 - buv.x * 14.0) * 0.4 + gust - 0.4) * 0.004 * gm * (0.35 + min(uWind, 1.6));
     }
     vec3 col = texture(uPlate, buv).rgb;
     float lum = dot(col, vec3(0.3, 0.55, 0.15));
@@ -121,10 +122,9 @@
 
     // ferne Nebelschwaden über dem Wolkenmeer (hinter den Inseln), über alle Bildschirme durchgehend
     vec2 gp = vec2(uGX + uv.x * sa, uv.y);
-    float wind = 0.012 + uWind * 0.05;
     if (uMist > 0.0) {
       float band = smoothstep(0.45, 0.95, uv.y);
-      float m = fbm(gp * vec2(1.4, 4.0) + vec2(-t * wind, t * 0.004)) * 0.7 + fbm(gp * vec2(3.0, 7.0) + vec2(-t * wind * 1.6, 0.0)) * 0.4;
+      float m = fbm(gp * vec2(1.4, 4.0) + vec2(-uWindT, t * 0.004)) * 0.7 + fbm(gp * vec2(3.0, 7.0) + vec2(-uWindT * 1.6, 0.0)) * 0.4;
       float d = smoothstep(0.45, 0.85, m) * band * uMist;
       vec3 mc = mix(vec3(1.0, 0.99, 0.96), vec3(1.0, 0.75, 0.62), dusk * (1.0 - day)) * mix(1.0, 0.25, night);
       col = mix(col, mc, d * 0.75);
@@ -186,7 +186,7 @@
 
     // Wolkenschleier ganz vorne: selten, dünn, über alles hinweg
     if (uMist > 0.0) {
-      float m = fbm(gp * vec2(0.9, 2.2) + vec2(-t * wind * 2.4, 3.0));
+      float m = fbm(gp * vec2(0.9, 2.2) + vec2(-uWindT * 2.4, 3.0));
       float d = smoothstep(0.62, 0.9, m) * uMist * 0.45;
       col = mix(col, mix(vec3(1.0), vec3(0.4, 0.45, 0.6), night), d);
     }
@@ -220,7 +220,7 @@
     if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
     gl.useProgram(prog);
     for (const n of ['uScene', 'uPlate', 'uMask', 'uStill', 'uGrass', 'uRes', 'uImg', 'uPanF', 'uPanB', 'uIsland', 'uSun', 'uT', 'uZoom', 'uTod',
-      'uMist', 'uRays', 'uBass', 'uWind', 'uGX', 'uStars', 'uMoon', 'uBobRect', 'uBobOff', 'uFall']) uni[n] = gl.getUniformLocation(prog, n);
+      'uMist', 'uRays', 'uBass', 'uWind', 'uWindT', 'uGrassT', 'uGX', 'uStars', 'uMoon', 'uBobRect', 'uBobOff', 'uFall']) uni[n] = gl.getUniformLocation(prog, n);
     const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
@@ -306,12 +306,88 @@
         const dx = (m.x - mouse.x) * W / H, dy = m.y - mouse.y, d = Math.hypot(dx, dy);
         if (d < 0.12) { const k = (1 - d / 0.12) * dt * 4; m.vx += mouse.vx * k * 0.5; m.vy += mouse.vy * k * 0.5; }
       }
+      // Böen vom Klick: die Druckwelle schiebt alles nach außen und mit dem Wind nach rechts
+      for (const g of gusts) {
+        const dx = (m.x - g.x) * W / H, dy = m.y - g.y, d = Math.hypot(dx, dy) + 1e-4, R = g.a * 0.9;
+        const band = Math.max(0, 1 - Math.abs(d - R) / 0.14) * g.k * (1 - g.a / GUST_LIFE);
+        if (band > 0) { const f = band * dt * 9 * light; m.vx += (dx / d * 0.7 + 0.5) * f * H / W; m.vy += dy / d * 0.7 * f; m.spin = (m.spin || 0) + band * dt * 18; }
+      }
+      if (m.spin) { m.rot += m.spin * dt; m.spin *= Math.pow(0.3, dt); }
       m.x += m.vx * dt; m.y += m.vy * dt; m.rot += dt * (m.kind === 'seeds' ? 0.4 : 1.6) * (0.5 + m.z);
       const gone = m.x > 1.08 || m.y < -0.1 || m.y > 1.1 || m.x < -0.25;
       if (m.a > m.life || gone) {
         if (m.life > 1e8 && motes.filter((q) => q.life > 1e8).length <= want) { Object.assign(m, newMote()); }
         else motes.splice(i, 1);
       }
+    }
+  }
+
+  /* ---------- Windstoß per Klick ----------
+     Eine Druckwelle läuft vom Klickpunkt nach außen (schiebt Blüten/Samen), dazu wehen ein paar weiße Windlinien
+     nach rechts davon, manche mit einer kleinen Schleife, wie gemalter Wind. */
+  const GUST_LIFE = 1.8;
+  function blow(x, y) {
+    gust = Math.min(2, gust + 0.9);
+    gusts.push({ x, y, a: 0, k: 1 });
+    if (gusts.length > 6) gusts.shift();
+    for (let k = 0; k < 7; k++) {
+      streaks.push({ x0: x - 0.04 + Math.random() * 0.05, y0: y + (Math.random() - 0.5) * 0.16, a: -k * 0.05 * Math.random(),
+        sp: 0.55 + Math.random() * 0.45, len: 0.12 + Math.random() * 0.14, amp: 0.006 + Math.random() * 0.014, f: 9 + Math.random() * 10,
+        ph: Math.random() * 6.28, curl: Math.random() < 0.45 ? 0.12 + Math.random() * 0.25 : -1, r: 0.02 + Math.random() * 0.018,
+        w: 1.2 + Math.random() * 1.6, life: 1.5 + Math.random() * 0.7 });
+    }
+    if (streaks.length > 60) streaks.splice(0, streaks.length - 60);
+    // Vögel in der Nähe erschrecken
+    const nowS = Date.now() / 1000, ar = W / H;
+    for (const fl of flocks(nowS)) for (const b of fl.birds) {
+      const lx = b.gx - SCR.index;
+      if (Math.hypot((lx - x) * ar, b.y - y) < 0.3) scared.set(b.id, 1);
+    }
+    // aufwirbelnde Blüten/Samen
+    if (cfg.floating !== 'none') for (let k = 0; k < 22; k++) {
+      const m = newMote(x + (Math.random() - 0.5) * 0.03, y + (Math.random() - 0.5) * 0.03, true);
+      const an = Math.random() * 6.28, v = 0.1 + Math.random() * 0.25;
+      m.vx = Math.cos(an) * v * H / W + 0.12; m.vy = Math.sin(an) * v - 0.05; m.spin = (Math.random() - 0.5) * 14;
+      motes.push(m);
+    }
+    if (motes.length > 280) motes.splice(0, motes.length - 280);
+  }
+  function stepGusts(dt) {
+    for (let i = gusts.length - 1; i >= 0; i--) { gusts[i].a += dt; if (gusts[i].a > GUST_LIFE) gusts.splice(i, 1); }
+    for (let i = streaks.length - 1; i >= 0; i--) { streaks[i].a += dt; if (streaks[i].a > streaks[i].life) streaks.splice(i, 1); }
+  }
+  // Punkt auf einer Windlinie bei Bogenlänge s (in Bildschirmhöhen)
+  function streakPt(st, s) {
+    let x = s, y = Math.sin(s * st.f + st.ph) * st.amp * Math.min(1, s * 8);
+    if (st.curl > 0) {
+      const L = st.r * 5, th = Math.min(Math.max((s - st.curl) / L, 0), 1) * 6.283;
+      x -= st.r * Math.sin(th) * 1.35; y += st.r * (Math.cos(th) - 1);
+    }
+    return [st.x0 * W + x * H, (st.y0 + y) * H];
+  }
+  function drawStreaks(night, dusk, day) {
+    if (!streaks.length) return;
+    const c = night > 0.5 ? [190, 205, 235] : dusk > 0.5 && day < 0.5 ? [255, 236, 220] : [255, 255, 252];
+    const peak = 0.6 * (1 - night * 0.55);
+    for (const st of streaks) {
+      if (st.a <= 0) continue;
+      const head = st.a * st.sp, tail = Math.max(0, head - st.len), fade = Math.min(1, st.a / 0.15) * Math.min(1, (st.life - st.a) / 0.5);
+      // als ein gefülltes, sich verjüngendes Band zeichnen (keine Einzelstriche, sonst wirkt es gestrichelt)
+      const N = 30, pts = [];
+      for (let k = 0; k <= N; k++) pts.push(streakPt(st, tail + (head - tail) * k / N));
+      const left = [], right = [], wmax = st.w * (H / 1080) * 1.4 + 0.5;
+      for (let k = 0; k <= N; k++) {
+        const a = pts[Math.max(0, k - 1)], b = pts[Math.min(N, k + 1)];
+        let nx = -(b[1] - a[1]), ny = b[0] - a[0]; const l = Math.hypot(nx, ny) || 1; nx /= l; ny /= l;
+        const u = k / N, hw = wmax * Math.pow(Math.sin(u * Math.PI), 0.7) * (0.35 + 0.65 * u);
+        left.push([pts[k][0] + nx * hw, pts[k][1] + ny * hw]); right.push([pts[k][0] - nx * hw, pts[k][1] - ny * hw]);
+      }
+      const gr = g2.createLinearGradient(pts[0][0], pts[0][1], pts[N][0], pts[N][1]), col = 'rgba(' + c.join(',') + ',';
+      gr.addColorStop(0, col + '0)'); gr.addColorStop(0.55, col + (peak * fade) + ')'); gr.addColorStop(1, col + (peak * fade * 0.8) + ')');
+      g2.fillStyle = gr; g2.beginPath(); g2.moveTo(left[0][0], left[0][1]);
+      for (const q of left) g2.lineTo(q[0], q[1]);
+      for (let k = N; k >= 0; k--) g2.lineTo(right[k][0], right[k][1]);
+      g2.closePath(); g2.fill();
     }
   }
 
@@ -353,6 +429,10 @@
     audio.active = Math.max(0, audio.active - dt);
     if (audio.active <= 0) { audio.bass *= 0.9; audio.high *= 0.9; }
     gust *= Math.pow(0.35, dt);
+    // Wind nicht als Zeit x Geschwindigkeit, sondern aufsummiert: sonst springen Nebel und Gras bei jeder Böe
+    windT += dt * (0.012 + (cfg.wind + gust) * 0.05);
+    grassT += dt * (0.4 + cfg.wind + gust * 1.5);
+    stepGusts(dt);
     stepMotes(dt);
     // Gischt am Wasserfall
     if (SC.fall && Math.random() < dt * 14) {
@@ -397,6 +477,7 @@
     gl.uniform1f(uni.uRays, SC.sun ? cfg.rays : 0);
     gl.uniform1f(uni.uBass, audio.bass * cfg.react);
     gl.uniform1f(uni.uWind, cfg.wind + gust);
+    gl.uniform1f(uni.uWindT, windT); gl.uniform1f(uni.uGrassT, grassT);
     gl.uniform1f(uni.uGX, SCR.index * (W / H));          // Panorama: Nebel und Sterne laufen über die Bildschirme durch
     gl.uniform1f(uni.uStars, cfg.stars ? 1 : 0);
     gl.uniform1f(uni.uMoon, SC.moon ? 1 : 0);
@@ -452,6 +533,7 @@
       if (scared.size > 400) scared.clear();
     }
     // Dinge im Wind
+    drawStreaks(night, dusk, Math.max(0, td));
     for (const m of motes) {
       const x = m.x * W, y = m.y * H, r = m.sz * m.z * H * 0.006;
       const al = Math.min(1, m.a * 1.2) * (m.life < 1e8 ? Math.min(1, (m.life - m.a) / 1.5) : 1);
@@ -520,10 +602,8 @@
   document.addEventListener('mouseleave', () => { mouse.inside = false; mouse.px = -1; });
   window.addEventListener('mousedown', (e) => {
     if (e.button !== 0 || !img) return;
-    // Klick: eine Böe, und dort wirbeln Samen/Blüten auf
-    gust = Math.min(1.5, gust + 0.6);
-    if (cfg.floating !== 'none') for (let k = 0; k < 14; k++) motes.push(newMote(e.clientX / W + (Math.random() - 0.5) * 0.02, e.clientY / H + (Math.random() - 0.5) * 0.02, true));
-    if (motes.length > 260) motes.splice(0, motes.length - 260);
+    // Klick: ein Windstoß weht von dort los
+    blow(e.clientX / W, e.clientY / H);
   });
 
   /* ================= Wallpaper Engine ================= */
@@ -562,5 +642,5 @@
   img = new Image(); plateImg = new Image(); maskImg = new Image(); stillImg = new Image();
   for (const [im, src] of [[img, SC.image], [plateImg, SC.plate], [maskImg, SC.mask], [stillImg, SC.still]]) { im.onload = done; im.src = src; }
   // zum Testen: vorspulen
-  window.Sky = { step: (dt, n) => { for (let i = 0; i < (n || 1); i++) step(dt); draw(); }, cfg, motes: () => motes };
+  window.Sky = { step: (dt, n) => { for (let i = 0; i < (n || 1); i++) step(dt); draw(); }, cfg, motes: () => motes, blow };
 })();
