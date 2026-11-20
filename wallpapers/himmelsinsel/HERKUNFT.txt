@@ -1,0 +1,10 @@
+Die drei Szenenbilder (in scenes.js als Data-URIs) wurden am 20.11.2026 lokal mit Z-Image-Turbo (Tongyi-MAI, Apache-2.0)
+über mflux erzeugt (je 1920x1088, 9 Schritte; Mitte Seed 7, links Seed 21, rechts Seed 21).
+Masken: Vordergrund (Insel, Felsen, Luftschiff) mit BiRefNet (über rembg) freigestellt; größte Fläche = Insel (R),
+weitere Teile schaukeln einzeln (B, Rechtecke in "bobs"). Wasserfall (G) = hell-bläuliche Pixel in einem Rechteck,
+größte zusammenhängende Fläche. Rechts: nur das Luftschiff bewegt sich, Mühle und Hang bleiben fest (Maske "still");
+Gras im Wind = grüne Pixel unten im Bild (G außerhalb der Insel).
+Himmelsplatte (plate): Bild mit ausgefülltem Vordergrund (OpenCV-Inpainting bei kleiner Auflösung, weich eingesetzt),
+damit Insel und Himmel sich bei Parallaxe und Schweben getrennt bewegen können.
+Wolkenschleier, Sonnenstrahlen, Wasserfall-Schlieren, Gischt, Tageszeit, Sterne, Mond, Sternschnuppen, Glühwürmchen,
+Vögel, Samen/Blüten/Blätter und Uhr sind Code (js/sky.js).

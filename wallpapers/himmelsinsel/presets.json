@@ -1,0 +1,84 @@
+[
+  {
+    "name": "Standard",
+    "values": {}
+  },
+  {
+    "name": "Tag/Nacht-Wechsel",
+    "values": {
+      "timemode": "cycle"
+    }
+  },
+  {
+    "name": "Sommertag mit viel Wind",
+    "values": {
+      "timemode": "day",
+      "wind": 85,
+      "floatcount": 80,
+      "birds": 80,
+      "mist": 65
+    }
+  },
+  {
+    "name": "Abendrot",
+    "values": {
+      "timemode": "dusk",
+      "rays": 85,
+      "floating": "sakura",
+      "floatcount": 30
+    }
+  },
+  {
+    "name": "Sternennacht",
+    "values": {
+      "timemode": "night",
+      "fireflies": true,
+      "stars": true,
+      "mist": 35,
+      "floatcount": 15
+    }
+  },
+  {
+    "name": "Kirschblüten im Wind",
+    "values": {
+      "floating": "sakura",
+      "floatcount": 90,
+      "wind": 65
+    }
+  },
+  {
+    "name": "Herbstwind",
+    "values": {
+      "floating": "maple",
+      "floatcount": 60,
+      "wind": 80,
+      "timemode": "dusk"
+    }
+  },
+  {
+    "name": "Ganz still",
+    "values": {
+      "wind": 10,
+      "mist": 20,
+      "birds": 15,
+      "floatcount": 10,
+      "float": 20,
+      "react": 0
+    }
+  },
+  {
+    "name": "Mit Uhr",
+    "values": {
+      "clock": true
+    }
+  },
+  {
+    "name": "Stromsparend",
+    "values": {
+      "mist": 20,
+      "floatcount": 15,
+      "birds": 30,
+      "renderscale": "50"
+    }
+  }
+]

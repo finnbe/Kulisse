@@ -120,6 +120,11 @@ Live-Hintergrund 🌊 (im 🦝-Menü ganz oben)
          Dazu "Yuzu Onsen Panorama": derselbe Onsen über bis zu 3 Bildschirme - links Bambusgarten mit Steinbecken,
          Mitte Onsen, rechts Veranda des Ryokan; bei 2 Bildschirmen links Onsen, rechts Veranda. Die App sagt jeder
          Seite, welcher Bildschirm (von links) sie ist: window.kulisseScreen = {index, count}.
+         "Himmelsinsel": schwebende Inseln über dem Wolkenmeer, ebenfalls über bis zu 3 Bildschirme - links Wolkenmeer
+         mit schaukelnden Felsen, Mitte Insel mit Ruinen, Baum und Wasserfall, rechts Mühle und Luftschiff (2 Bildschirme:
+         Insel + Luftschiff). Wolkenschleier und Vogelschwärme ziehen nahtlos über alle Bildschirme, Löwenzahnsamen/
+         Blüten/Blätter im Wind (Maus = Wind, Klick = Böe), Tiefeneffekt, Abendrot, Sternennacht mit Mond, Sternschnuppen
+         und Glühwürmchen (Herkunft der Bilder in wallpapers/himmelsinsel/HERKUNFT.txt).
   Sperrbildschirm: "Auch auf dem Sperrbildschirm (Standbild)". macOS lässt keine App auf den Sperrbildschirm
          zeichnen, zeigt dort aber das Schreibtischbild. Darum setzt die App alle 15 Minuten, nach jeder Änderung und
          beim Sperren ein Standbild vom Hintergrund als Schreibtischbild (je Bildschirm, Dateien in
