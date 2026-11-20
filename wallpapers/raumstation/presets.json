@@ -1,0 +1,55 @@
+[
+  {
+    "name": "Standard",
+    "values": {}
+  },
+  {
+    "name": "Viel Verkehr",
+    "values": {
+      "ships": 95,
+      "dust": 70,
+      "meteors": true
+    }
+  },
+  {
+    "name": "Ganz still",
+    "values": {
+      "ships": 10,
+      "dust": 15,
+      "nebula": 30,
+      "planet": 25,
+      "float": 25,
+      "meteors": false
+    }
+  },
+  {
+    "name": "Bunter Nebel",
+    "values": {
+      "nebula": 100,
+      "dust": 90,
+      "glare": 40
+    }
+  },
+  {
+    "name": "Sonnenaufgang",
+    "values": {
+      "glare": 100,
+      "nebula": 30
+    }
+  },
+  {
+    "name": "Mit Uhr",
+    "values": {
+      "clock": true
+    }
+  },
+  {
+    "name": "Stromsparend",
+    "values": {
+      "dust": 0,
+      "ships": 30,
+      "nebula": 0,
+      "renderscale": "50"
+    }
+  }
+]

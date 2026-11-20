@@ -1,0 +1,11 @@
+Die drei Szenenbilder (in scenes.js als Data-URIs) wurden am 20.11.2026 lokal mit Z-Image-Turbo (Tongyi-MAI, Apache-2.0)
+über mflux erzeugt (je 1920x1088, 9 Schritte; Mitte Seed 21, links Seed 21, rechts Seed 7). Eigene Motive im Stil
+handgemalter Anime-Hintergründe; keine Figuren, Schiffe oder Szenen aus bestehenden Filmen.
+Masken: Vordergrund (Station, Modul, Schiff, Sonde) mit BiRefNet (über rembg) freigestellt; Mitte: größte Fläche =
+Station (R), sonst schweben die Teile einzeln (B, Rechtecke in "bobs"). Planet (G) = Fläche unter dem Horizont, der von
+Hand mit drei Punkten je Bild als Parabel festgelegt ist ("horizon"). Positionslichter sitzen an den äußersten Punkten
+der Station (links, rechts, oben).
+Platte (plate): Bild mit ausgefülltem Vordergrund (OpenCV-Inpainting bei kleiner Auflösung, weich eingesetzt), damit
+Station und All sich bei Parallaxe und Schweben getrennt bewegen können.
+Fensterflackern, Positionslichter, Planetenwolken, Atmosphärensaum, Sternfunkeln, Nebel, Sonne, Raumfähren,
+Sternschnuppen, Sternenstaub und Uhr sind Code (js/station.js).

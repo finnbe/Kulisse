@@ -125,6 +125,12 @@ Live-Hintergrund 🌊 (im 🦝-Menü ganz oben)
          Insel + Luftschiff). Wolkenschleier und Vogelschwärme ziehen nahtlos über alle Bildschirme, Löwenzahnsamen/
          Blüten/Blätter im Wind (Maus = Wind, Klick = Böe), Tiefeneffekt, Abendrot, Sternennacht mit Mond, Sternschnuppen
          und Glühwürmchen (Herkunft der Bilder in wallpapers/himmelsinsel/HERKUNFT.txt).
+         "Raumstation": eine alte, gemütliche Raumstation über einem Planeten, über bis zu 3 Bildschirme - links
+         Sonnenaufgang über dem Planeten mit Mond und Modul, Mitte Station mit Gewächshauskuppel, rechts Schiff mit
+         Sonde vor einem Nebel (2 Bildschirme: Station + Schiff). Station schwebt und dreht sich leicht, Fenster
+         flackern, Positionslichter blinken, Wolken ziehen über den Planeten, Sterne funkeln, Raumfähren fliegen nahtlos
+         über alle Bildschirme (Klick = eine Fähre startet), Sternschnuppen, Sternenstaub, Sonnenlicht und Fenster zur
+         Musik (Herkunft der Bilder in wallpapers/raumstation/HERKUNFT.txt).
   Sperrbildschirm: "Auch auf dem Sperrbildschirm (Standbild)". macOS lässt keine App auf den Sperrbildschirm
          zeichnen, zeigt dort aber das Schreibtischbild. Darum setzt die App alle 15 Minuten, nach jeder Änderung und
          beim Sperren ein Standbild vom Hintergrund als Schreibtischbild (je Bildschirm, Dateien in

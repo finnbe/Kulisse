@@ -1,0 +1,182 @@
+{
+  "contentrating": "Everyone",
+  "description": "A cosy old space station high above a blue-green planet, spread across up to three screens. In the middle the station with its greenhouse dome full of trees and warmly glowing windows; on the left the sun rising over the planet's edge; on the right a little ship by a docking module. With two screens: the station on the left, the ship on the right. With one screen: the station. The station floats and slowly turns, its windows flicker and its navigation lights blink, clouds drift across the planet, the stars twinkle and a faint nebula drifts by. Little shuttles fly seamlessly from one screen to the next. Move the mouse to see the layers shift in depth, click to launch a shuttle. Sunlight and station lights pulse to your music.",
+  "file": "index.html",
+  "preview": "preview.jpg",
+  "tags": [
+    "Relaxing",
+    "Sci-Fi",
+    "Anime"
+  ],
+  "title": "Space Station: a cosy station above a planet across your screens",
+  "type": "web",
+  "visibility": "private",
+  "general": {
+    "supportsaudioprocessing": true,
+    "properties": {
+      "ships": {
+        "order": 1,
+        "text": "ui_rs_ships",
+        "type": "slider",
+        "value": 50,
+        "min": 0,
+        "max": 100,
+        "fraction": false
+      },
+      "dust": {
+        "order": 2,
+        "text": "ui_rs_dust",
+        "type": "slider",
+        "value": 40,
+        "min": 0,
+        "max": 150,
+        "fraction": false
+      },
+      "nebula": {
+        "order": 3,
+        "text": "ui_rs_nebula",
+        "type": "slider",
+        "value": 50,
+        "min": 0,
+        "max": 100,
+        "fraction": false
+      },
+      "planet": {
+        "order": 4,
+        "text": "ui_rs_planet",
+        "type": "slider",
+        "value": 50,
+        "min": 0,
+        "max": 100,
+        "fraction": false
+      },
+      "glare": {
+        "order": 5,
+        "text": "ui_rs_glare",
+        "type": "slider",
+        "value": 60,
+        "min": 0,
+        "max": 100,
+        "fraction": false
+      },
+      "twinkle": {
+        "order": 6,
+        "text": "ui_rs_twinkle",
+        "type": "bool",
+        "value": true
+      },
+      "lights": {
+        "order": 7,
+        "text": "ui_rs_lights",
+        "type": "bool",
+        "value": true
+      },
+      "meteors": {
+        "order": 8,
+        "text": "ui_rs_meteors",
+        "type": "bool",
+        "value": true
+      },
+      "react": {
+        "order": 9,
+        "text": "ui_rs_react",
+        "type": "slider",
+        "value": 60,
+        "min": 0,
+        "max": 100,
+        "fraction": false
+      },
+      "parallax": {
+        "order": 10,
+        "text": "ui_rs_parallax",
+        "type": "slider",
+        "value": 50,
+        "min": 0,
+        "max": 100,
+        "fraction": false
+      },
+      "float": {
+        "order": 11,
+        "text": "ui_rs_float",
+        "type": "slider",
+        "value": 50,
+        "min": 0,
+        "max": 100,
+        "fraction": false
+      },
+      "clock": {
+        "order": 12,
+        "text": "ui_rs_clock",
+        "type": "bool",
+        "value": false
+      },
+      "hour24": {
+        "order": 13,
+        "text": "ui_rs_hour24",
+        "type": "bool",
+        "value": true,
+        "condition": "clock.value == true"
+      },
+      "renderscale": {
+        "order": 14,
+        "text": "ui_rs_renderscale",
+        "type": "combo",
+        "value": "100",
+        "options": [
+          {
+            "label": "ui_rs_rs_100",
+            "value": "100"
+          },
+          {
+            "label": "ui_rs_rs_75",
+            "value": "75"
+          },
+          {
+            "label": "ui_rs_rs_50",
+            "value": "50"
+          }
+        ]
+      }
+    },
+    "localization": {
+      "en-us": {
+        "ui_rs_ships": "Shuttle traffic",
+        "ui_rs_dust": "Star dust",
+        "ui_rs_nebula": "Drifting nebula",
+        "ui_rs_planet": "Moving clouds on the planet",
+        "ui_rs_glare": "Sunlight",
+        "ui_rs_twinkle": "Twinkling stars",
+        "ui_rs_lights": "Station lights",
+        "ui_rs_meteors": "Shooting stars",
+        "ui_rs_react": "React to music",
+        "ui_rs_parallax": "Depth on mouse move",
+        "ui_rs_float": "Floating motion",
+        "ui_rs_clock": "Show clock",
+        "ui_rs_hour24": "24-hour clock",
+        "ui_rs_renderscale": "Render resolution (lower = faster)",
+        "ui_rs_rs_100": "100 % (best)",
+        "ui_rs_rs_75": "75 %",
+        "ui_rs_rs_50": "50 % (laptops)"
+      },
+      "de-de": {
+        "ui_rs_ships": "Raumfähren-Verkehr",
+        "ui_rs_dust": "Sternenstaub",
+        "ui_rs_nebula": "Ziehender Nebel",
+        "ui_rs_planet": "Ziehende Wolken auf dem Planeten",
+        "ui_rs_glare": "Sonnenlicht",
+        "ui_rs_twinkle": "Funkelnde Sterne",
+        "ui_rs_lights": "Lichter der Station",
+        "ui_rs_meteors": "Sternschnuppen",
+        "ui_rs_react": "Auf Musik reagieren",
+        "ui_rs_parallax": "Tiefe bei Mausbewegung",
+        "ui_rs_float": "Schweben",
+        "ui_rs_clock": "Uhr anzeigen",
+        "ui_rs_hour24": "24-Stunden-Uhr",
+        "ui_rs_renderscale": "Renderauflösung (weniger = schneller)",
+        "ui_rs_rs_100": "100 % (beste Qualität)",
+        "ui_rs_rs_75": "75 %",
+        "ui_rs_rs_50": "50 % (Laptops)"
+      }
+    }
+  }
+}

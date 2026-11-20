@@ -3,7 +3,7 @@
 <img src="src/AppIcon.png" width="128" alt="Kulisse-Symbol">
 
 Menüleisten-App für macOS: **Zeiger-Designs für Präsentationen** (Waschbär, Laserpointer, Ente mit Küken, UFO …)
-und **Live-Hintergründe** für den Schreibtisch im Wallpaper-Engine-Format (Koi-Teich, Yuzu Onsen, Yuzu Onsen Panorama und Himmelsinsel über bis zu 3 Bildschirme), mit
+und **Live-Hintergründe** für den Schreibtisch im Wallpaper-Engine-Format (Koi-Teich, Yuzu Onsen, Yuzu Onsen Panorama, Himmelsinsel und Raumstation über bis zu 3 Bildschirme), mit
 Musikreaktion, Sperrbildschirm-Standbild und eigenem Bildschirmschoner.
 
 ## Herunterladen
