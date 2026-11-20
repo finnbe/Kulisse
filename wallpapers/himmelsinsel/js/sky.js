@@ -147,10 +147,13 @@
       vec3 ic = texture(uScene, fuv).rgb;
       if (mk.g > 0.0) {
         // Wasser fällt: Schlieren laufen nach unten, unten schneller und breiter
-        float sp = 1.6 + 2.5 * smoothstep(0.4, 1.0, fuv.y);
-        float s1 = noise(vec2(fuv.x * 160.0, fuv.y * 7.0 - t * sp));
-        float s2 = noise(vec2(fuv.x * 70.0 + 3.0, fuv.y * 4.0 - t * sp * 0.7));
-        vec2 ruv = fuv + vec2((s2 - 0.5) * 0.003, -fract(t * 0.6) * 0.0);
+        // Die Zeit darf nur mit einer festen Geschwindigkeit eingehen (nicht mit einer höhenabhängigen, sonst
+        // zieht sich das Muster mit der Zeit auseinander und läuft scheinbar nach oben). Schneller nach unten wird
+        // es über die Streckung: ly wächst unten langsamer -> dieselbe Phase legt dort mehr Weg zurück.
+        float ly = log(fuv.y + 0.3);
+        float s1 = noise(vec2(fuv.x * 160.0, ly * 10.0 - t * 2.6));
+        float s2 = noise(vec2(fuv.x * 70.0 + 3.0, ly * 5.5 - t * 1.6));
+        vec2 ruv = fuv + vec2((s2 - 0.5) * 0.003, 0.0);
         vec3 wc = texture(uScene, ruv + vec2(0.0, (s1 - 0.5) * 0.01)).rgb;
         wc = mix(wc, vec3(0.93, 0.97, 1.0), smoothstep(0.55, 0.9, s1 * 0.7 + s2 * 0.5) * 0.55);
         wc *= 0.9 + 0.12 * s2;
